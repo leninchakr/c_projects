@@ -20,7 +20,7 @@ void print_buffer_info(const char *buffer, size_t size) {
 
     // For Testing ! => Compiler Warning. Bypassing 'const' Security !!!
     // Give writable-pointer :|
-// EXPERIMENT:
+    // EXPERIMENT:
 // buffer is const char *, so modification through buffer is prohibited.
 //
 // char *ptr = buffer;
