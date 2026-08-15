@@ -33,3 +33,21 @@ void print_buffer_info(const char *buffer, size_t size) {
 
     printf("Inside test() => Modified 2nd Position value %s\n", ptr);
 }
+
+// Get Memeory Related Information
+int get_memory_infor(MemoryInfo * meminfo){
+
+    File *file = fopen("proc/meminfor", "r");
+
+    if(file == NULL) {
+        
+            return -1;
+
+    }
+
+    char line[256];
+
+    unsigned long total = 0;
+    unsigned long avaialbe = 0;
+    
+}
