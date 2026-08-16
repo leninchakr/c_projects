@@ -13,6 +13,8 @@ int main(void) {
     // Memory Address (Pointer Data Type) type -> char *
 	char hostname[256];
     char hostname_disp[256];
+    
+    MemoryInfo meminfo;
 
     int result_hostname =  gethostname(hostname, sizeof(hostname));
 
@@ -26,12 +28,24 @@ int main(void) {
 
     }
 
-    print_buffer_info(hostname, sizeof(hostname));
+//    print_buffer_info(hostname, sizeof(hostname));
+
+    // get_memory_info(&meminfo);
+
+    get_memory_info_fd(&meminfo);
 
     printf("System Monitor\n");
 
     printf("----------------------\n");
-    printf("Hostname \t\t: %s \n", hostname_disp);
+    
+    printf("Hostname \t\t\t: %s \n", hostname_disp);
+    
+    printf("Total Memeory \t\t\t: %lu kB \n", meminfo.total_kb);
+
+    printf("Available  Memeory \t\t: %lu kB \n", meminfo.available_kb);
+
+    printf("Used Memeory \t\t\t: %lu kB \n", meminfo.used_kb);
+
 
 	return 0;
 
