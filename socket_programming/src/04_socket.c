@@ -3,6 +3,7 @@
 #include<unistd.h>
 #include<netinet/ip.h>
 #include<arpa/inet.h>
+#include<string.h>
 
 #define PORT 2200
 
@@ -48,11 +49,11 @@ int main(void) {
     }
 
     //  4. Accept Connection
-    int size_of_in_addr = sizeof(in_addr);
+    socklen_t size_of_in_addr = sizeof(in_addr);
 
-    int accept_fd = accept(server_fd, (struct sockaddr *) &in_addr, (socklen_t *) &size_of_in_addr);
+    int connected_fd = accept(server_fd, (struct sockaddr *) &in_addr, (socklen_t *) &size_of_in_addr);
 
-    if(accept_fd == -1) {
+    if(connected_fd == -1) {
         perror("accept");
         return -1;
     }
@@ -62,7 +63,9 @@ int main(void) {
     // 5. Receive msg from the accepted socket
     char buffer[256];
 
-    ssize_t received_bytes = recv(accept_fd, buffer, sizeof(buffer)-1, 0);
+    memset(buffer, 0, sizeof(buffer));
+
+    ssize_t received_bytes = recv(connected_fd, buffer, sizeof(buffer)-1, 0);
 
     if(received_bytes > 0 ) {
         buffer[received_bytes] = '\0';
@@ -73,7 +76,7 @@ int main(void) {
         perror("recv");
     }
 
-    close(accept_fd);
+    close(connected_fd);
     close(server_fd);
 
     return 0;
