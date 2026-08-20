@@ -2,7 +2,7 @@
 #include<sys/socket.h>
 #include<arpa/inet.h>
 #include<stdbool.h>
-#include<string.h>
+#include<unistd.h>
 
 #define PORT 2200
 
@@ -72,6 +72,12 @@ int main(void) {
                     is_end_of_transaction = true;
                     break;
                 } else {
+
+                    if(char_pos >= sizeof(final_msg) - 1) {
+                        is_end_of_transaction = true;
+                        break;
+                    }
+
                     final_msg[char_pos] = message[i];
                     char_pos++;
                 }
@@ -88,7 +94,10 @@ int main(void) {
 
    }
 
-    printf("Received Message From Client : %s \n", final_msg);
+    printf("\nReceived Message From Client : \n%s\n", final_msg);
+
+    close(listen_fd);
+    close(connected_fd);
 
     return 0;
 }
