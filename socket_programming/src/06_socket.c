@@ -4,8 +4,11 @@
 #include<stdbool.h>
 #include<unistd.h>
 #include<string.h>
+#include<errno.h>
 
 #define PORT 2200
+
+bool send_all_msg_from_server(int connected_fd, const char *full_msg_ptr);
 
 int main(void) {
 
@@ -47,14 +50,16 @@ int main(void) {
 
     printf("New Client-Request discovered...\n");
 
-    char *msg_from_server = "Hello from Server!";
+    /* Send From Server to Client */
+   const char *msg_from_server = "Hello from Server!";
 
-    ssize_t sent_bytes = send(connected_fd, msg_from_server, strlen(msg_from_server),0);
-    if(sent_bytes == -1) {
-        perror("Send");
-        return -1;
-    }
+   bool is_all_sent =  send_all_msg_from_server(connected_fd, msg_from_server);
+   if(!is_all_sent){
+       perror("All Send");
+       return -1;
+   } 
 
+   /* Receive From Client */ 
     char final_msg[256] = {0};
     uint32_t char_pos = 0;
 
@@ -102,9 +107,54 @@ int main(void) {
 
     printf("\nClient Message :\n");
     printf("%s\n", final_msg);
+    
 
     close(connected_fd);
     close(listen_fd);
 
     return 0;
+}
+
+
+bool send_all_msg_from_server(int connected_fd, const char *full_msg_ptr) {
+
+    ssize_t sent_bytes = 0;
+    bool is_all_bytes_sent = false;
+    size_t send_msg_len = strlen(full_msg_ptr);
+
+    while(!is_all_bytes_sent) {
+
+        /* Some Message */
+        /* 0->11 */
+        ssize_t sBytes = send(connected_fd, (full_msg_ptr + sent_bytes), send_msg_len - sent_bytes, MSG_NOSIGNAL);
+
+        if(sBytes == -1) {
+    
+            // If send() is interrupted by Server's Signal, then error will be EINTR
+            if(errno == EINTR){
+                continue;
+            }
+
+            if(errno == EPIPE){
+                fprintf(stderr, "Client disconnected while sending...\n");
+                return false;
+            }
+
+            perror("Send");
+            return false;
+        }
+
+        if (sBytes == 0) {
+            fprintf(stderr, "send() returned 0\n");
+            return false;
+        }
+
+        sent_bytes = sent_bytes + sBytes;
+
+        if((int) sent_bytes >= (int) send_msg_len) {
+            is_all_bytes_sent = true;
+        }
+    }
+
+    return true;
 }
