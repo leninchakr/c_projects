@@ -25,8 +25,8 @@ int main(void) {
     }
 
     /* Send Data to Server */
-    const char *send_msg_ptr = "Hello from Client!!!*";
-    ssize_t sent_bytes = send(to_server_fd, send_msg_ptr, sizeof(*send_msg_ptr), MSG_NOSIGNAL);
+    const char send_msg_ptr[] = "Hello from Client!!!*";
+    ssize_t sent_bytes = send(to_server_fd, send_msg_ptr, sizeof(send_msg_ptr), MSG_NOSIGNAL);
     if(sent_bytes == -1) {
         perror("Send-Client");
         return -1;
