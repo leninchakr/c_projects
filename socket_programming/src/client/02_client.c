@@ -4,6 +4,7 @@
 #include<stdbool.h>
 #include<string.h>
 #include<errno.h>
+#include<unistd.h>
 
 #define PORT 2200
 
@@ -13,6 +14,11 @@ int main(void) {
 
     /* Create a Socket to Server */
     int to_server_fd = socket(AF_INET, SOCK_STREAM, 0);
+
+    if(to_server_fd == -1) {
+        perror("socket-client");
+        return -1;
+    }
 
     /* Create a connection on 'to_server_fd' */
     
@@ -44,6 +50,8 @@ int main(void) {
     */
 
     send_all_msg_to_server(to_server_fd, send_msg_ptr);
+
+    close(to_server_fd);
 
     return 0;
 }

@@ -1,0 +1,28 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_OUTPUT_EXCMD	mixed	/number, pattern, mixed, or combineV2/
+!_TAG_OUTPUT_FILESEP	slash	/slash or backslash/
+!_TAG_OUTPUT_MODE	u-ctags	/u-ctags or e-ctags/
+!_TAG_PATTERN_LENGTH_LIMIT	96	/0 for no limit/
+!_TAG_PROC_CWD	/home/lenin/c_projects/socket_programming/	//
+!_TAG_PROGRAM_AUTHOR	Universal Ctags Team	//
+!_TAG_PROGRAM_NAME	Universal Ctags	/Derived from Exuberant Ctags/
+!_TAG_PROGRAM_URL	https://ctags.io/	/official site/
+!_TAG_PROGRAM_VERSION	5.9.0	//
+PORT	src/client/01_client.c	/^#define PORT /;"	d	file:
+PORT	src/client/02_client.c	/^#define PORT /;"	d	file:
+PORT	src/server/02_socket.c	/^#define PORT /;"	d	file:
+PORT	src/server/03_socket.c	/^#define PORT /;"	d	file:
+PORT	src/server/04_socket.c	/^#define PORT /;"	d	file:
+PORT	src/server/05_socket.c	/^#define PORT /;"	d	file:
+PORT	src/server/06_socket.c	/^#define PORT /;"	d	file:
+main	src/client/01_client.c	/^int main(void) {$/;"	f	typeref:typename:int
+main	src/client/02_client.c	/^int main(void) {$/;"	f	typeref:typename:int
+main	src/server/01_socket.c	/^int main(void) {$/;"	f	typeref:typename:int
+main	src/server/02_socket.c	/^int main(void) {$/;"	f	typeref:typename:int
+main	src/server/03_socket.c	/^int main(void) {$/;"	f	typeref:typename:int
+main	src/server/04_socket.c	/^int main(void) {$/;"	f	typeref:typename:int
+main	src/server/05_socket.c	/^int main(void) {$/;"	f	typeref:typename:int
+main	src/server/06_socket.c	/^int main(void) {$/;"	f	typeref:typename:int
+send_all_msg_from_server	src/server/06_socket.c	/^bool send_all_msg_from_server(int connected_fd, const char *full_msg_ptr) {$/;"	f	typeref:typename:bool
+send_all_msg_to_server	src/client/02_client.c	/^bool send_all_msg_to_server(int to_server_fd, const char *full_msg) {$/;"	f	typeref:typename:bool
