@@ -1,0 +1,14 @@
+Client                         Server
+  │                              │
+  │──── "Hello Server*" ────────>│
+  │                              │
+  │──── shutdown(SHUT_WR) ─────>│
+  │                              │
+  │                         recv() → 0
+  │                              │
+  │<──── "Hello Client!" ────────│
+  │                              │
+  │                         shutdown(SHUT_WR)
+  │                              │
+  │──── recv() response ────────>│
+  │                              │
