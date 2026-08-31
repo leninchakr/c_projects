@@ -29,17 +29,34 @@ int main(void) {
                             (const struct sockaddr *) &server_addr, 
                             sizeof(server_addr)
                             );
+
     if(connect_state == -1) {
         perror("connect");
         return -1;
     }
-
     
     char server_msg[256] = {0};
-    ssize_t recv_bytes = recv(to_server_fd, server_msg, sizeof(server_msg), 0);
-    server_msg[recv_bytes] = '\0';
+    ssize_t recv_bytes = recv(to_server_fd, server_msg, sizeof(server_msg)-1, 0);
 
-    printf("Received Message: %s\n", server_msg);    
+
+    if(recv_bytes == -1) {
+
+        if(errno == EINTR){
+            continue;
+        }
+
+        perror("Receive-Client");
+        return -1;
+
+    } else if(recv_bytes == 0) {
+
+        printf("Connection is closed by Server..!!\n");
+        return -1;
+
+    } else {
+        server_msg[recv_bytes] = '\0';
+        printf("Received Message: %s\n", server_msg);
+    }
     
     // close the socket
     close(to_server_fd);

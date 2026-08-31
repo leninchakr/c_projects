@@ -11,6 +11,7 @@
 !_TAG_PROGRAM_VERSION	5.9.0	//
 PORT	src/client/01_client.c	/^#define PORT /;"	d	file:
 PORT	src/client/02_client.c	/^#define PORT /;"	d	file:
+PORT	src/client/03_client.c	/^#define PORT /;"	d	file:
 PORT	src/server/02_socket.c	/^#define PORT /;"	d	file:
 PORT	src/server/03_socket.c	/^#define PORT /;"	d	file:
 PORT	src/server/04_socket.c	/^#define PORT /;"	d	file:
@@ -18,11 +19,14 @@ PORT	src/server/05_socket.c	/^#define PORT /;"	d	file:
 PORT	src/server/06_socket.c	/^#define PORT /;"	d	file:
 main	src/client/01_client.c	/^int main(void) {$/;"	f	typeref:typename:int
 main	src/client/02_client.c	/^int main(void) {$/;"	f	typeref:typename:int
+main	src/client/03_client.c	/^int main(void) {$/;"	f	typeref:typename:int
+main	src/client/04_client.c	/^int main(void) {$/;"	f	typeref:typename:int
 main	src/server/01_socket.c	/^int main(void) {$/;"	f	typeref:typename:int
 main	src/server/02_socket.c	/^int main(void) {$/;"	f	typeref:typename:int
 main	src/server/03_socket.c	/^int main(void) {$/;"	f	typeref:typename:int
 main	src/server/04_socket.c	/^int main(void) {$/;"	f	typeref:typename:int
 main	src/server/05_socket.c	/^int main(void) {$/;"	f	typeref:typename:int
 main	src/server/06_socket.c	/^int main(void) {$/;"	f	typeref:typename:int
+recv_full	src/client/04_client.c	/^bool recv_full(to_server_fd, char *server_msg) {$/;"	f	typeref:typename:bool
 send_all_msg_from_server	src/server/06_socket.c	/^bool send_all_msg_from_server(int connected_fd, const char *full_msg_ptr) {$/;"	f	typeref:typename:bool
 send_all_msg_to_server	src/client/02_client.c	/^bool send_all_msg_to_server(int to_server_fd, const char *full_msg) {$/;"	f	typeref:typename:bool
