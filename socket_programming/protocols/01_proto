@@ -12,3 +12,30 @@ Client                         Server
   │                              │
   │──── recv() response ────────>│
   │                              │
+  
+  ------------------------------
+
+Plan:
+
+Server:
+        -       Create socket
+        -       bind the socket
+        -       listen for incomming socket
+        -       Wait for client Response
+                        -       while()
+                                        -       Receive all messages from client
+                                        -       Idenfity "*" and print them
+                                        -       When peer closes the connection,
+                                                        -       Reply back to Client
+                                                        -       Close Write-Part
+
+Client:
+        -       Create socket
+        -       connect with server
+        -       Send Multiple messages
+        -       Close WR
+        -       Now client gets reply from Server
+        -       Processes the client
+                        -       Identify "!" and print
+        -       do Full Closure
+
