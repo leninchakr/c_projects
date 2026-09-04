@@ -6,10 +6,76 @@
 #include<arpa/inet.h>
 #include<netinet/in.h>
 #include<errno.h>
+#include<stdlib.h>
+#include<string.h>
+#include<stdbool.h>
 
 #define PORT 2200
+#define BUFFER_SIZE 256
 
-int recv_all(int conn_fd, char *recv_buf, size_t recv_buf_len);
+// 1.Define Node
+typedef struct MessageNode {
+    char data[BUFFER_SIZE];
+    struct MessageNode *next;
+} MessageNode;
+
+// 2.Define LL
+typedef struct MessageList {
+    MessageNode *head;
+    MessageNode *tail;
+    size_t count;
+} MessageList;
+
+// 3.Initialize List
+void init_list(MessageList *list){
+    list->head = NULL;
+    list->tail = NULL;
+    list->count = 0;
+}
+
+// 4.Add New Message-Node to the LL
+int add_node(MessageList *list, const char *msg){
+    
+    MessageNode *new_node = (MessageNode *)malloc(sizeof(MessageNode));
+    if(!new_node){
+        perror("Memory allocation filed\n");
+        return -1;
+    }
+
+    strncpy(new_node->data, msg, BUFFER_SIZE-1);
+    new_node->data[BUFFER_SIZE] = '\0';
+    new_node->next = NULL;
+
+    if(list->tail == NULL) {
+        list->head = new_node;
+        list->tail = new_node;
+    } else {
+        list->tail->next = new_node;
+        list->tail = new_node;
+    }
+    list->count++;
+
+    return 0;
+}
+
+// 5.Print LL
+void print_all_msg(MessageList *list){
+
+    printf("---- Full Messages ------\n");
+
+    MessageNode *curr_node = list->head;
+    
+    uint32_t line_no = 0;
+
+    while(curr_node->next != NULL){
+        line_no++;
+        printf("%d. %s\n", line_no, curr_node->data);
+        curr_node = curr_node->next;
+    }
+    printf("------ Done ----------\n");
+}
+
+int recv_all(int conn_fd, MessageList *msgLisg);
 
 int main(void) {
 
@@ -64,41 +130,50 @@ int main(void) {
         perror("Server: Unable to accept client socket");
         return -1;
     }
+        
+    MessageList msgList = {0};
 
-    char recv_msg[256] = {0};
+    recv_all(connected_fd, &msgList);
 
-    recv_all(connected_fd, recv_msg, sizeof(recv_msg));
-
-    printf("Client Message: %s\n", recv_msg);
+    print_all_msg(&msgList);
 
     return 0;
 }
 
+int recv_all(int conn_fd, MessageList *msgList) {
 
+    char end_of_each_msg = '*';
 
-
-int recv_all(int conn_fd, char *recv_buf, size_t recv_buf_len) {
-
-    char end_of_client_msg = '*';
-
-    ssize_t recv_bytes = recv(conn_fd, recv_buf, recv_buf_len, 0);
-
-    if(recv_bytes == -1) {
-        perror("Server: Received Fialed");
-        return -1;
-    }
-
-    if(recv_bytes == 0) {
-        fprintf(stdout, "Peer said SHUT_WR\n");
-        return 0;
-    }
-
-    for(int i=0; i < recv_bytes; i++) {
+    char temp[BUFFER_SIZE] = {0};
     
-      if(recv_buf[i] == end_of_client_msg) 
-          recv_buf[recv_bytes] = '\0';
-    
+    bool isRecvComp = false;
+
+    while(!isRecvComp) {
+
+        ssize_t recv_bytes = recv(conn_fd, temp, BUFFER_SIZE-1, 0);
+
+        if(recv_bytes == -1) {
+            perror("Server: Received Fialed");
+            return -1;
+        }
+
+        if(recv_bytes == 0) {
+            fprintf(stdout, "Peer said SHUT_WR\n");
+            isRecvComp = true;
+            return 0;
+        }
+
+        for(int i=0; i < recv_bytes; i++) {
+            if(temp[i] == end_of_each_msg) 
+                temp[recv_bytes] = '\0';
+        }
+
+        add_node(msgList, temp);
+
+        memset(temp, 0, sizeof(temp));
+
     }
+
 
     return 0;
 }
