@@ -75,7 +75,8 @@ void print_all_msg(MessageList *list){
     printf("------ Done ----------\n");
 }
 
-int recv_all(int conn_fd, MessageList *msgLisg);
+int recv_all(int conn_fd, MessageList *msgList);
+int send_all(int conn_fd, MessageList *msgList);
 
 int main(void) {
 
@@ -158,6 +159,7 @@ int recv_all(int conn_fd, MessageList *msgList) {
         }
 
         if(recv_bytes == 0) {
+            send_all(conn_fd, msgList);
             fprintf(stdout, "Peer said SHUT_WR\n");
             isRecvComp = true;
             return 0;
@@ -174,6 +176,23 @@ int recv_all(int conn_fd, MessageList *msgList) {
 
     }
 
+
+    return 0;
+}
+
+
+int send_all(int conn_fd, MessageList *msgList) {
+
+    MessageNode *curr_node = msgList->head;
+
+    while(curr_node->next != NULL) {
+    
+        char temp[BUFFER_SIZE] = curr_node->data;
+        
+        send(conn_fd, temp, BUFFER_SIZE, 0);
+
+        curr_node = curr_node->next;
+    }
 
     return 0;
 }

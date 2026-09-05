@@ -1,0 +1,14 @@
+#!/bin/bash
+
+HOST="127.0.0.1"
+PORT="2200"
+
+# Detect netcat shutdown flag (-N for OpenBSD nc, -q 0 for GNU nc)
+if nc -h 2>&1 | grep -q '\-N'; then
+    NC_FLAG="-N"
+else
+    NC_FLAG="-q 0"
+fi
+
+# Send 3 messages ending with * and send SHUT_WR upon EOF
+printf "First message*\nSecond message*\nThird message*\n" | nc $NC_FLAG "$HOST" "$PORT"
