@@ -1,6 +1,7 @@
 /*
     Refer "01_proto"
 */
+#define _DEFAULT_SOURCE
 #include<stdio.h>
 #include<sys/socket.h>
 #include<arpa/inet.h>
@@ -15,7 +16,7 @@
 
 // 1.Define Node
 typedef struct MessageNode {
-    char data[BUFFER_SIZE];
+    char *data;
     struct MessageNode *next;
 } MessageNode;
 
@@ -42,8 +43,7 @@ int add_node(MessageList *list, const char *msg){
         return -1;
     }
 
-    strncpy(new_node->data, msg, BUFFER_SIZE-1);
-    new_node->data[BUFFER_SIZE] = '\0';
+    new_node->data= strdup(msg);
     new_node->next = NULL;
 
     if(list->tail == NULL) {
@@ -67,7 +67,7 @@ void print_all_msg(MessageList *list){
     
     uint32_t line_no = 0;
 
-    while(curr_node->next != NULL){
+    while(curr_node != NULL){
         line_no++;
         printf("%d. %s\n", line_no, curr_node->data);
         curr_node = curr_node->next;
@@ -143,15 +143,17 @@ int main(void) {
 
 int recv_all(int conn_fd, MessageList *msgList) {
 
-    char end_of_each_msg = '*';
+    char *buf = malloc(BUFFER_SIZE);
+    if(buf == NULL){
+        perror("Malloc Failed");
+        return -1;
+    }
 
-    char temp[BUFFER_SIZE] = {0};
-    
     bool isRecvComp = false;
 
     while(!isRecvComp) {
 
-        ssize_t recv_bytes = recv(conn_fd, temp, BUFFER_SIZE-1, 0);
+        ssize_t recv_bytes = recv(conn_fd, buf, BUFFER_SIZE-1, 0);
 
         if(recv_bytes == -1) {
             perror("Server: Received Fialed");
@@ -162,20 +164,29 @@ int recv_all(int conn_fd, MessageList *msgList) {
             send_all(conn_fd, msgList);
             fprintf(stdout, "Peer said SHUT_WR\n");
             isRecvComp = true;
-            return 0;
+            // return 0;
         }
 
-        for(int i=0; i < recv_bytes; i++) {
-            if(temp[i] == end_of_each_msg) 
-                temp[recv_bytes] = '\0';
+        if(recv_bytes > 0){
+
+            buf[recv_bytes] = '\0';
+
+            // Get the First-Token Address
+            char *token = strtok(buf, "*");
+
+            while(token != NULL){
+                printf("Token : %s\n", token);
+
+                // Add New node to linked list
+                add_node(msgList, token);
+
+                // Pass NULL to continue scannig the same string!
+                token = strtok(NULL, "*");
+            }
         }
-
-        add_node(msgList, temp);
-
-        memset(temp, 0, sizeof(temp));
-
     }
 
+    free(buf);
 
     return 0;
 }
@@ -185,9 +196,9 @@ int send_all(int conn_fd, MessageList *msgList) {
 
     MessageNode *curr_node = msgList->head;
 
-    while(curr_node->next != NULL) {
+    while(curr_node != NULL) {
     
-        char temp[BUFFER_SIZE] = curr_node->data;
+        char *temp = curr_node->data;
         
         send(conn_fd, temp, BUFFER_SIZE, 0);
 
