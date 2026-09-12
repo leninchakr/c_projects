@@ -1,19 +1,31 @@
-Client                         Server
-  │                              │
-  │──── "Hello Server*" ────────>│
-  │                              │
-  │──── shutdown(SHUT_WR) ─────>│
-  │                              │
-  │                         recv() → 0
-  │                              │
-  │<──── "Hello Client!" ────────│
-  │                              │
-  │                         shutdown(SHUT_WR)
-  │                              │
-  │──── recv() response ────────>│
-  │                              │
-  
-  ------------------------------
+CLIENT                                      SERVER
+  |                                           |
+  | "1-st Message Apple*"                     |
+  | "2-nd Message Ball*"                      |
+  | "3-rd Message Chocolate*"                 |
+  | "4-th Message SkyRoot*"                   |
+  |                                           |
+  | shutdown(SHUT_WR)                         |
+  |------------------------------------------>|
+  |                                           |
+  |                                  recv() == 0
+  |                                  "Peer said SHUT_WR"
+  |                                           |
+  |                                  traverse MessageList
+  |                                           |
+  |<--------- message 1 --------------------- |
+  |<--------- message 2 --------------------- |
+  |<--------- message 3 --------------------- |
+  |<--------- message 4 --------------------- |
+  |                                           |
+  |                                  shutdown(SHUT_WR)
+  |<------------------------------------------|
+  |                                           |
+  | recv() == 0                               |
+  | "Peer closed connection..."               |
+  |                                           |
+
+
 
 Plan:
 

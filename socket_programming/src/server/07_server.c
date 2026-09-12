@@ -1,5 +1,33 @@
 /*
-    Refer "01_proto"
+    Refer "01_proto":
+
+CLIENT                                      SERVER
+  |                                           |
+  | "1-st Message Apple*"                     |
+  | "2-nd Message Ball*"                      |
+  | "3-rd Message Chocolate*"                 |
+  | "4-th Message SkyRoot*"                   |
+  |                                           |
+  | shutdown(SHUT_WR)                         |
+  |------------------------------------------>|
+  |                                           |
+  |                                  recv() == 0
+  |                                  "Peer said SHUT_WR"
+  |                                           |
+  |                                  traverse MessageList
+  |                                           |
+  |<--------- message 1 --------------------- |
+  |<--------- message 2 --------------------- |
+  |<--------- message 3 --------------------- |
+  |<--------- message 4 --------------------- |
+  |                                           |
+  |                                  shutdown(SHUT_WR)
+  |<------------------------------------------|
+  |                                           |
+  | recv() == 0                               |
+  | "Peer closed connection..."               |
+  |                                           |
+
 */
 #define _DEFAULT_SOURCE
 #include<stdio.h>
@@ -61,7 +89,7 @@ int add_node(MessageList *list, const char *msg){
 // 5.Print LL
 void print_all_msg(MessageList *list){
 
-    printf("---- Full Messages ------\n");
+    printf("---------- Server : Client's Message - Start--------------\n");
 
     MessageNode *curr_node = list->head;
     
@@ -69,10 +97,10 @@ void print_all_msg(MessageList *list){
 
     while(curr_node != NULL){
         line_no++;
-        printf("%d. %s\n", line_no, curr_node->data);
+        printf("recv #%d: %s\n", line_no, curr_node->data);
         curr_node = curr_node->next;
     }
-    printf("------ Done ----------\n");
+    printf("---------- Server : Client's Message - End--------------\n");
 }
 
 int recv_all(int conn_fd, MessageList *msgList);
@@ -118,7 +146,7 @@ int main(void) {
     struct sockaddr_in clientAddr;
     clientAddr.sin_family = AF_INET;
     clientAddr.sin_port = htons(PORT);
-    inet_pton(AF_INET, "1270.0.0.1", &clientAddr.sin_addr);
+    inet_pton(AF_INET, "127.0.0.1", &clientAddr.sin_addr);
 
     socklen_t clientAddr_len = sizeof(clientAddr);
 
@@ -161,28 +189,34 @@ int recv_all(int conn_fd, MessageList *msgList) {
         }
 
         if(recv_bytes == 0) {
+
+            fprintf(stdout, "Server : Client said SHUT_WR\n");
+
             send_all(conn_fd, msgList);
-            fprintf(stdout, "Peer said SHUT_WR\n");
+            shutdown(conn_fd, SHUT_WR);
+
             isRecvComp = true;
-            // return 0;
         }
 
-        if(recv_bytes > 0){
-
+        if(recv_bytes > 0) {
+            
+            printf("---------- Token-Start ----------\n");
+            
             buf[recv_bytes] = '\0';
 
             // Get the First-Token Address
             char *token = strtok(buf, "*");
 
             while(token != NULL){
-                printf("Token : %s\n", token);
-
+                printf("Server-Token : %s\n", token);
+                
                 // Add New node to linked list
                 add_node(msgList, token);
 
                 // Pass NULL to continue scannig the same string!
                 token = strtok(NULL, "*");
             }
+            printf("---------- Token-End ----------\n");
         }
     }
 
@@ -199,8 +233,13 @@ int send_all(int conn_fd, MessageList *msgList) {
     while(curr_node != NULL) {
     
         char *temp = curr_node->data;
-        
-        send(conn_fd, temp, BUFFER_SIZE, 0);
+        send(conn_fd, temp, strlen(temp), 0);
+
+        char test = '$';
+        send(conn_fd, &test, 1, 0);
+
+        char eom = '!';
+        send(conn_fd, &eom, 1, 0);
 
         curr_node = curr_node->next;
     }
