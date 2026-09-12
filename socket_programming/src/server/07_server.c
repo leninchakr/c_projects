@@ -178,6 +178,9 @@ int recv_all(int conn_fd, MessageList *msgList) {
     }
 
     bool isRecvComp = false;
+    
+    char *full_part_boundary = NULL;
+    char *bal_part = NULL;
 
     while(!isRecvComp) {
 
@@ -198,25 +201,65 @@ int recv_all(int conn_fd, MessageList *msgList) {
             isRecvComp = true;
         }
 
+        /*
+        recv()
+        ↓
+        append bytes to pending data
+        ↓
+        look for '*'
+        ↓
+        complete message?
+        │
+        ├── YES → add_node()
+        │
+        └── NO  → keep it for next recv()
+        */
+
         if(recv_bytes > 0) {
-            
-            printf("---------- Token-Start ----------\n");
             
             buf[recv_bytes] = '\0';
 
-            // Get the First-Token Address
-            char *token = strtok(buf, "*");
+            /* Juicy Part - Start */
+            size_t old_len = bal_part != NULL ? strlen(bal_part) : 0;
+            size_t new_len = old_len + recv_bytes;
 
-            while(token != NULL){
-                printf("Server-Token : %s\n", token);
-                
-                // Add New node to linked list
-                add_node(msgList, token);
-
-                // Pass NULL to continue scannig the same string!
-                token = strtok(NULL, "*");
+            char *temp_ptr  = realloc(bal_part, new_len+1);
+            if(temp_ptr == NULL){
+                perror("Memory Allocation Failed");
+                return -1;
             }
-            printf("---------- Token-End ----------\n");
+            bal_part = temp_ptr;
+
+            memcpy(bal_part + old_len, buf, recv_bytes);
+
+            bal_part[new_len] = '\0';
+            /* Juicy Part - End */
+
+            // Find last Occurance of '*' and Split the buffer.
+            full_part_boundary = strrchr(bal_part, '*');
+            if(full_part_boundary != NULL) {
+
+                *full_part_boundary = '\0';
+
+                // Get the First-Token Address. Split till '\0'
+                char *token = strtok(bal_part, "*");
+
+                printf("---------- Token-Start ----------\n");
+                while(token != NULL){
+                    printf("Server-Token : %s\n", token);
+
+                    // Add New node to linked list
+                    add_node(msgList, token);
+
+                    // Pass NULL to continue scannig the same string!
+                    token = strtok(NULL, "*");
+                }
+                printf("---------- Token-End ----------\n");
+
+                char *remaining = full_part_boundary+1;
+                memmove(bal_part, remaining, strlen(remaining)+1);
+            }
+
         }
     }
 
