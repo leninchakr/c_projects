@@ -104,7 +104,9 @@ void print_all_msg(MessageList *list){
 }
 
 int recv_all(int conn_fd, MessageList *msgList);
+int recv_own(int conn_fd, MessageList *ll);
 int send_all(int conn_fd, MessageList *msgList);
+void myFree(void *p);
 
 int main(void) {
 
@@ -162,7 +164,8 @@ int main(void) {
         
     MessageList msgList = {0};
 
-    recv_all(connected_fd, &msgList);
+    //recv_all(connected_fd, &msgList);
+    recv_own(connected_fd, &msgList);
 
     print_all_msg(&msgList);
 
@@ -288,4 +291,104 @@ int send_all(int conn_fd, MessageList *msgList) {
     }
 
     return 0;
+}
+
+int recv_own(int conn_fd, MessageList *ll) {
+
+    // Step-3
+    char *bal_msg __attribute__((cleanup(myFree))) = NULL;
+
+    // Step-2
+    char *temp __attribute__((cleanup(myFree))) = malloc(BUFFER_SIZE);
+
+    //int part = 0;
+    bool isRcom = false;
+
+    while(!isRcom) {
+
+        // Step-1
+        ssize_t recv_bytes = recv(conn_fd, temp, BUFFER_SIZE, 0);
+
+        /* For Test - Start */
+        /*
+        part++;
+
+        if(part==1) {
+            strcpy(temp, "Apple*Ball*Choco");
+            recv_bytes = strlen(temp);
+        }
+
+        if(part==2) {
+            strcpy(temp, "late*SkyROOT*");
+            recv_bytes = strlen(temp);
+            isRcom = true;
+        }
+        */
+        /* For Test - End */
+
+        if(recv_bytes == 0) {
+            fprintf(stdout, "Server : Client said SHUT_WR\n");
+            isRcom = true;
+            continue;
+        }
+
+        if(recv_bytes == -1) {
+            perror("Recv");
+            return -1;
+        }
+
+        // Step-4
+        ssize_t bal_len = bal_msg == NULL ? 0 : strlen(bal_msg);
+        ssize_t new_len = bal_len + recv_bytes;
+
+        // Step-5
+        char *temp_loc = realloc(bal_msg, new_len+1);
+        if(temp_loc == NULL) {
+            perror("Memory Reallocation failed...\n");
+            return -1;
+        }
+        bal_msg = temp_loc;
+        if(bal_len == 0) {
+            *bal_msg = '\0';
+        }
+
+        // Step-6
+        //strcat(bal_msg, temp);
+        memcpy(bal_msg+bal_len, temp, recv_bytes);
+        *(bal_msg+new_len) = '\0';
+
+        // Step-7
+        char *bound = strrchr(bal_msg, '*');
+        if(bound != NULL) {
+            *bound = '\0';
+        }
+
+        // Step-8
+        if(strlen(bal_msg) > 0) {
+
+            char *token = strtok(bal_msg, "*");
+
+            while(token != NULL) {
+                add_node(ll, token);
+                token = strtok(NULL, "*");
+            }
+        }
+
+        // Step-9
+        //strncpy(bal_msg, bound+1, strlen(bound+1));
+        if(bound != NULL) {
+            ssize_t remain_size = strlen(bound+1);
+            memmove(bal_msg, bound+1, remain_size+1);
+        }
+
+        //printf("Final Balance : %s\n", bal_msg);
+    }
+
+    return 0;
+}
+
+void myFree(void *p) {
+    void **pp = (void **)p;
+    free(*pp);
+    *pp = NULL;
 }
