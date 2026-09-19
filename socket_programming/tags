@@ -53,12 +53,16 @@ main	src/server/04_server.c	/^int main(void) {$/;"	f	typeref:typename:int
 main	src/server/05_server.c	/^int main(void) {$/;"	f	typeref:typename:int
 main	src/server/06_server.c	/^int main(void) {$/;"	f	typeref:typename:int
 main	src/server/07_server.c	/^int main(void) {$/;"	f	typeref:typename:int
+myFree	src/client/05_client.c	/^void myFree(void *ptr){$/;"	f	typeref:typename:void
+myFree	src/server/07_server.c	/^void myFree(void *p) {$/;"	f	typeref:typename:void
 next	src/client/05_client.c	/^    struct MessageNode *next;$/;"	m	struct:MessageNode	typeref:struct:MessageNode *	file:
 next	src/server/07_server.c	/^    struct MessageNode *next;$/;"	m	struct:MessageNode	typeref:struct:MessageNode *	file:
 print_all_msg	src/server/07_server.c	/^void print_all_msg(MessageList *list){$/;"	f	typeref:typename:void
+print_ll	src/client/05_client.c	/^void print_ll(Message_LL *ll) {$/;"	f	typeref:typename:void
 recv_all	src/server/07_server.c	/^int recv_all(int conn_fd, MessageList *msgList) {$/;"	f	typeref:typename:int
 recv_from_server	src/client/05_client.c	/^int recv_from_server(int server_fd, Message_LL * recv_msg_ll) {$/;"	f	typeref:typename:int
 recv_full	src/client/04_client.c	/^bool recv_full(int to_server_fd, char *server_msg, ssize_t server_msg_size) {$/;"	f	typeref:typename:bool
+recv_own	src/server/07_server.c	/^int recv_own(int conn_fd, MessageList *ll) {$/;"	f	typeref:typename:int
 send_all	src/server/07_server.c	/^int send_all(int conn_fd, MessageList *msgList) {$/;"	f	typeref:typename:int
 send_all_2_server	src/client/05_client.c	/^bool send_all_2_server(int  server_fd, Message_LL *ll) {$/;"	f	typeref:typename:bool
 send_all_msg_from_server	src/server/06_server.c	/^bool send_all_msg_from_server(int connected_fd, const char *full_msg_ptr) {$/;"	f	typeref:typename:bool

@@ -333,6 +333,11 @@ int recv_own(int conn_fd, MessageList *ll) {
         }
 
         if(recv_bytes == -1) {
+
+            if(errno == EINTR){
+                continue;
+            }
+
             perror("Recv");
             return -1;
         }
