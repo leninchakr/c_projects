@@ -124,7 +124,9 @@ bool send_all_2_server(int  server_fd, Message_LL *ll) {
     while(curr_node != NULL) {
 
         char *temp = curr_node->data;
+        ssize_t msg_len = strlen(curr_node->data);
         ssize_t send_bytes = 0;
+        ssize_t tot_s_bytes = 0;
     
         // We assume one send() sends the complete message
         /*
@@ -135,7 +137,14 @@ bool send_all_2_server(int  server_fd, Message_LL *ll) {
            - Remaining bytes are lost!!!
         */
         send_remaining:
-        send_bytes = send(server_fd, temp, strlen(temp+send_bytes), 0);
+        send_bytes = send(
+                            server_fd, 
+                            temp, 
+                            strlen(temp+tot_s_bytes), 
+                            0
+                         );
+
+        tot_s_bytes = tot_s_bytes + send_bytes;
 
         if(send_bytes == -1) {
             perror("Clinet: send");
@@ -143,7 +152,7 @@ bool send_all_2_server(int  server_fd, Message_LL *ll) {
         } else if(send_bytes == 0) {
             fprintf(stderr, "Server disconnected connection....\n");
             return false;
-        } else if(send_bytes < strlen(curr_node->data)) {
+        } else if(tot_s_bytes < msg_len) {
             goto send_remaining;
         } else {
             // To-Do: Ensure send_bytes == strlen(curr_node->data)
