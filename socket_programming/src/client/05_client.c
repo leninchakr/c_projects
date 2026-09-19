@@ -124,18 +124,29 @@ bool send_all_2_server(int  server_fd, Message_LL *ll) {
     while(curr_node != NULL) {
 
         char *temp = curr_node->data;
+        ssize_t send_bytes = 0;
     
-        strcpy(temp, curr_node->data);
-        
-        ssize_t send_bytes = send(server_fd, temp, strlen(temp), 0);
+        // We assume one send() sends the complete message
+        /*
+           - If mesasge is: Chocolate*
+           - we request to send 10-bytes to send()
+           - But only 6-bytes may be sent
+           - So send_bytes > 0; then we move to next not.
+           - Remaining bytes are lost!!!
+        */
+        send_remaining:
+        send_bytes = send(server_fd, temp, strlen(temp+send_bytes), 0);
 
         if(send_bytes == -1) {
             perror("Clinet: send");
             return false;
-        }else if(send_bytes == 0) {
+        } else if(send_bytes == 0) {
             fprintf(stderr, "Server disconnected connection....\n");
             return false;
-        }else {
+        } else if(send_bytes < strlen(curr_node->data)) {
+            goto send_remaining;
+        } else {
+            // To-Do: Ensure send_bytes == strlen(curr_node->data)
             curr_node = curr_node->next;
         }
     }
