@@ -1,0 +1,11 @@
+basic
+│
+├── ELF header
+├── program information
+├── sections
+│   ├── .text
+│   ├── .rodata
+│   ├── .data
+│   └── ...
+├── symbols
+└── debugging information
