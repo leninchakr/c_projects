@@ -332,6 +332,15 @@ int send_all(int conn_fd, MessageList *msgList) {
     return 0;
 }
 
+/*
+    recv_own()
+ ├── receive bytes from socket
+ ├── manage growing buffer
+ ├── find message boundary '*'
+ ├── tokenize messages
+ ├── add messages to linked list
+ └── manage memory
+*/
 int recv_own(int conn_fd, MessageList *ll) {
 
     // Step-3
