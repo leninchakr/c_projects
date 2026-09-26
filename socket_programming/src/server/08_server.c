@@ -56,17 +56,34 @@ typedef struct MessageList {
     size_t count;
 } MessageList;
 
+// State Machine for Receive
+typedef enum {
+    RECV_DATA,
+    RECV_PEER_CLOSED,
+    RECV_RETRY,
+    RECV_ERROR
+} RecvState;
+
+// Result Set of Recv Function
+typedef struct {
+    RecvState state;
+    ssize_t bytes;
+} Recv_ResultSet;
+
 void init_list(MessageList *list);
 int add_node(MessageList *list, const char *msg);
 void print_all_msg(const MessageList *list);
 
-int recv_all(int conn_fd, MessageList *msgList);
-int recv_own(int conn_fd, MessageList *ll);
+int recv_all(int conn_fd, MessageList *ll);
 int send_all(int conn_fd, MessageList *msgList);
 void myFree(void *p);
 
 int create_listen_socket(void);
 int accept_client(int listen_fd);
+Recv_ResultSet one_read_recv(int conn_fd, char *temp);
+int prepare_bal_data(char **bal_msg, char *temp, ssize_t bytes);
+int tokenize_add_node(char *bal_msg, MessageList *ll, char **bound);
+void recalculate_bal_data(char *bal_msg, char *bound);
 
 int main(void) {
 
@@ -85,8 +102,7 @@ int main(void) {
     MessageList msgList;
     init_list(&msgList);
 
-    //recv_all(connected_fd, &msgList);
-    recv_own(connected_fd, &msgList);
+    recv_all(connected_fd, &msgList);
 
     print_all_msg(&msgList);
 
@@ -156,105 +172,6 @@ int accept_client(int listen_fd) {
     }
 
     return connected_fd;
-}
-
-int recv_all(int conn_fd, MessageList *msgList) {
-
-    char *buf = malloc(BUFFER_SIZE);
-    if(buf == NULL){
-        perror("Malloc Failed");
-        return -1;
-    }
-
-    bool isRecvComp = false;
-    
-    char *full_part_boundary = NULL;
-    char *bal_part = NULL;
-
-    while(!isRecvComp) {
-
-        ssize_t recv_bytes = recv(conn_fd, buf, BUFFER_SIZE-1, 0);
-
-        if(recv_bytes == -1) {
-            perror("Server: Received Fialed");
-            return -1;
-        }
-
-        if(recv_bytes == 0) {
-
-            fprintf(stdout, "Server : Client said SHUT_WR\n");
-
-            send_all(conn_fd, msgList);
-            shutdown(conn_fd, SHUT_WR);
-
-            isRecvComp = true;
-        }
-
-        /*
-        recv()
-        ↓
-        append bytes to pending data
-        ↓
-        look for '*'
-        ↓
-        complete message?
-        │
-        ├── YES → add_node()
-        │
-        └── NO  → keep it for next recv()
-        */
-
-        if(recv_bytes > 0) {
-            
-            buf[recv_bytes] = '\0';
-
-            /* Juicy Part - Start */
-            size_t old_len = bal_part != NULL ? strlen(bal_part) : 0;
-            size_t new_len = old_len + recv_bytes;
-
-            char *temp_ptr  = realloc(bal_part, new_len+1);
-            if(temp_ptr == NULL){
-                perror("Memory Allocation Failed");
-                return -1;
-            }
-            bal_part = temp_ptr;
-
-            memcpy(bal_part + old_len, buf, recv_bytes);
-
-            bal_part[new_len] = '\0';
-            /* Juicy Part - End */
-
-            // Find last Occurance of '*' and Split the buffer.
-            full_part_boundary = strrchr(bal_part, '*');
-            if(full_part_boundary != NULL) {
-
-                *full_part_boundary = '\0';
-
-                // Get the First-Token Address. Split till '\0'
-                char *token = strtok(bal_part, "*");
-
-                printf("---------- Token-Start ----------\n");
-                while(token != NULL){
-                    printf("Server-Token : %s\n", token);
-
-                    // Add New node to linked list
-                    add_node(msgList, token);
-
-                    // Pass NULL to continue scannig the same string!
-                    token = strtok(NULL, "*");
-                }
-                printf("---------- Token-End ----------\n");
-
-                char *remaining = full_part_boundary+1;
-                memmove(bal_part, remaining, strlen(remaining)+1);
-            }
-
-        }
-    }
-
-    free(buf);
-
-    return 0;
 }
 
 // 3.Initialize List
@@ -332,16 +249,7 @@ int send_all(int conn_fd, MessageList *msgList) {
     return 0;
 }
 
-/*
-    recv_own()
- ├── receive bytes from socket
- ├── manage growing buffer
- ├── find message boundary '*'
- ├── tokenize messages
- ├── add messages to linked list
- └── manage memory
-*/
-int recv_own(int conn_fd, MessageList *ll) {
+int recv_all(int conn_fd, MessageList *ll) {
 
     // Step-3
     char *bal_msg __attribute__((cleanup(myFree))) = NULL;
@@ -353,91 +261,144 @@ int recv_own(int conn_fd, MessageList *ll) {
     bool isRcom = false;
 
     while(!isRcom) {
+        
+        // Read the Buffer one-time & get avaiable data in temp
+        Recv_ResultSet recv_rs = one_read_recv(conn_fd, temp);
 
-        // Step-1
-        ssize_t recv_bytes = recv(conn_fd, temp, BUFFER_SIZE, 0);
-
-        /* For Test - Start */
-        /*
-        part++;
-
-        if(part==1) {
-            strcpy(temp, "Apple*Ball*Choco");
-            recv_bytes = strlen(temp);
+        // Handle State Suitably
+        if(recv_rs.state == RECV_ERROR){
+            perror("RECV_ERROR");
+            return -1;
         }
 
-        if(part==2) {
-            strcpy(temp, "late*SkyROOT*");
-            recv_bytes = strlen(temp);
-            isRcom = true;
+        if(recv_rs.state == RECV_RETRY){
+            continue;
         }
-        */
-        /* For Test - End */
 
-        if(recv_bytes == 0) {
-            fprintf(stdout, "Server : Client said SHUT_WR\n");
+        if(recv_rs.state == RECV_PEER_CLOSED){
             isRcom = true;
             continue;
         }
 
-        if(recv_bytes == -1) {
-
-            if(errno == EINTR){
-                continue;
-            }
-
-            perror("Recv");
+        // Prepare final balance data
+        int status = prepare_bal_data(&bal_msg, temp, recv_rs.bytes);
+        if(status == -1) {
             return -1;
         }
 
-        // Step-4
-        ssize_t bal_len = bal_msg == NULL ? 0 : strlen(bal_msg);
-        ssize_t new_len = bal_len + recv_bytes;
+        // Extract only Full Msg and Add to Linked-List
+        char *bound = NULL;
 
-        // Step-5
-        char *temp_loc = realloc(bal_msg, new_len+1);
-        if(temp_loc == NULL) {
-            perror("Memory Reallocation failed...\n");
+        int state_token = tokenize_add_node(bal_msg, ll, &bound);
+        if(state_token == -1){
             return -1;
         }
-        bal_msg = temp_loc;
-        if(bal_len == 0) {
-            *bal_msg = '\0';
-        }
 
-        // Step-6
-        //strcat(bal_msg, temp);
-        memcpy(bal_msg+bal_len, temp, recv_bytes);
-        *(bal_msg+new_len) = '\0';
-
-        // Step-7
-        char *bound = strrchr(bal_msg, '*');
-        if(bound != NULL) {
-            *bound = '\0';
-        }
-
-        // Step-8
-        if(strlen(bal_msg) > 0) {
-
-            char *token = strtok(bal_msg, "*");
-
-            while(token != NULL) {
-                add_node(ll, token);
-                token = strtok(NULL, "*");
-            }
-        }
-
-        // Step-9
-        //strncpy(bal_msg, bound+1, strlen(bound+1));
-        if(bound != NULL) {
-            ssize_t remain_size = strlen(bound+1);
-            memmove(bal_msg, bound+1, remain_size+1);
-        }
-
-        //printf("Final Balance : %s\n", bal_msg);
+        // Recalculate the Balance Data
+        recalculate_bal_data(bal_msg, bound);
     }
 
     return 0;
+}
+
+Recv_ResultSet one_read_recv(int conn_fd, char *temp) {
+
+    Recv_ResultSet rs;
+
+    // Step-1
+    ssize_t recv_bytes = recv(conn_fd, temp, BUFFER_SIZE, 0);
+
+    //   STATE : Peer Closed Connection
+    if(recv_bytes == 0) {
+        rs.state = RECV_PEER_CLOSED;
+        rs.bytes = 0;
+        return rs;
+    }
+
+    if(recv_bytes == -1) {
+
+        // STATE: Retry
+        if(errno == EINTR) {
+            rs.state = RECV_RETRY;
+            rs.bytes = -1;
+            return rs;
+        }
+
+        // STATE: Error
+        rs.state = RECV_ERROR;
+        rs.bytes = -1;
+        return rs;
+    }
+    
+    // STATE: Data
+    rs.state = RECV_DATA;
+    rs.bytes = recv_bytes;
+    return rs;
+}
+
+int prepare_bal_data(char **bal_msg_ptr, char *temp, ssize_t bytes) {
+
+    ssize_t recv_bytes = bytes;
+
+    // Step-4
+    ssize_t bal_len = *bal_msg_ptr == NULL ? 0 : strlen(*bal_msg_ptr);
+    ssize_t new_len = bal_len + recv_bytes;
+
+    // Step-5
+    char *temp_loc = realloc(*bal_msg_ptr, new_len+1);
+    if(temp_loc == NULL) {
+        perror("Memory Reallocation failed...\n");
+        return -1;
+    }
+    *bal_msg_ptr = temp_loc;
+    if(bal_len == 0) {
+        **bal_msg_ptr = '\0';
+    }
+
+    // Step-6
+    //strcat(bal_msg, temp);
+    memcpy(*bal_msg_ptr + bal_len, temp, recv_bytes);
+    *(*bal_msg_ptr+new_len) = '\0';
+
+    return 0;
+}
+
+int tokenize_add_node(char *bal_msg, MessageList *ll, char **bound) {
+
+    // Step-7
+    *bound = strrchr(bal_msg, '*');
+    if(*bound != NULL) {
+        **bound = '\0';
+    }
+
+    // Step-8
+    if(strlen(bal_msg) > 0) {
+
+        char *token = strtok(bal_msg, "*");
+
+        while(token != NULL) {
+            
+            int status = add_node(ll, token);
+            if(status == -1) {
+                return -1;
+            }
+
+            token = strtok(NULL, "*");
+        }
+    }
+
+    return 0;
+}
+
+void recalculate_bal_data(char *bal_msg, char *bound) {
+
+    // Step-9
+    //strncpy(bal_msg, bound+1, strlen(bound+1));
+    if(bound != NULL) {
+        ssize_t remain_size = strlen(bound+1);
+        memmove(bal_msg, bound+1, remain_size+1);
+    }
+
 }
 
 void myFree(void *p) {
