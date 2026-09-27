@@ -31,6 +31,7 @@ CLIENT                                      SERVER
 
 */
 
+#ifndef TEST
 int main(void) {
 
     int listen_fd = create_listen_socket();
@@ -54,6 +55,7 @@ int main(void) {
 
     return 0;
 }
+#endif
 
 int create_listen_socket(void) {
 

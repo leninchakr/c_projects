@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stddef.h>
 
+#include "../../include/09/server/server.h"
+
 void setUp(void)
 {
     printf("Setting up resources...\n");
@@ -11,23 +13,6 @@ void tearDown(void)
 {
     printf("Closing resources...\n");
 }
-
-/******************************************************/
-
-// 1.Define Node
-typedef struct MessageNode {
-    char *data;
-    struct MessageNode *next;
-} MessageNode;
-
-// 2.Define Linked-List
-typedef struct MessageList {
-    MessageNode *head;
-    MessageNode *tail;
-    size_t count;
-} MessageList;
-
-/******************************************************/
 
 /*
  *  Test-1: init_list()
