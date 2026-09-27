@@ -284,6 +284,13 @@ Recv_ResultSet one_read_recv(int conn_fd, char *temp) {
     return rs;
 }
 
+/*
+ * Note: char **bal_msg_ptr <- &bal_msg
+ *
+ * We are going to change, what the pointer pointing to!
+ *
+ * So pass address of the pointer. With '*', we will change where it points to
+ */
 int prepare_bal_data(char **bal_msg_ptr, char *temp, ssize_t bytes) {
 
     ssize_t recv_bytes = bytes;
@@ -298,6 +305,8 @@ int prepare_bal_data(char **bal_msg_ptr, char *temp, ssize_t bytes) {
         perror("Memory Reallocation failed...\n");
         return -1;
     }
+    /* We change caller's varaible's value ! */
+    /* IOW: Change Values inside the Caller's Stack :-) */
     *bal_msg_ptr = temp_loc;
     if(bal_len == 0) {
         **bal_msg_ptr = '\0';
