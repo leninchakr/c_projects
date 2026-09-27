@@ -1,0 +1,354 @@
+#include "../../../include/09/server/server.h"
+/*
+    Refer "01_proto":
+
+CLIENT                                      SERVER
+  |                                           |
+  | "1-st Message Apple*"                     |
+  | "2-nd Message Ball*"                      |
+  | "3-rd Message Chocolate*"                 |
+  | "4-th Message SkyRoot*"                   |
+  |                                           |
+  | shutdown(SHUT_WR)                         |
+  |------------------------------------------>|
+  |                                           |
+  |                                  recv() == 0
+  |                                  "Peer said SHUT_WR"
+  |                                           |
+  |                                  traverse MessageList
+  |                                           |
+  |<--------- message 1 --------------------- |
+  |<--------- message 2 --------------------- |
+  |<--------- message 3 --------------------- |
+  |<--------- message 4 --------------------- |
+  |                                           |
+  |                                  shutdown(SHUT_WR)
+  |<------------------------------------------|
+  |                                           |
+  | recv() == 0                               |
+  | "Peer closed connection..."               |
+  |                                           |
+
+*/
+
+int main(void) {
+
+    int listen_fd = create_listen_socket();
+    if(listen_fd == -1) {
+        fprintf(stderr, "Unable to create listen socket...\n");
+        return -1;
+    }
+
+    int connected_fd = accept_client(listen_fd);
+    if(connected_fd == -1) {
+        fprintf(stderr, "Unabled to hold on client connection...\n");
+        return -1;
+    }
+        
+    MessageList msgList;
+    init_list(&msgList);
+
+    recv_all(connected_fd, &msgList);
+
+    print_all_msg(&msgList);
+
+    return 0;
+}
+
+int create_listen_socket(void) {
+
+    // 1.Create Listen Socket
+    int listen_fd = socket(AF_INET, SOCK_STREAM, 0);
+    if(listen_fd == -1) {
+        perror("Server: Unable to create Listen-Socket");
+        return -1;
+    }
+
+    // 2.Bind the listen socket with Server Address
+    struct sockaddr_in servAddr = {0};
+
+    servAddr.sin_family = AF_INET;
+    servAddr.sin_port = htons(PORT);
+    inet_pton(AF_INET, "127.0.0.1", &servAddr.sin_addr);
+    
+    int bind_status = bind(
+                            listen_fd, 
+                            (const struct sockaddr *) &servAddr, 
+                            sizeof(servAddr)
+                           );
+    if(bind_status == -1) {
+        perror("Server: Uable to bind the listen socket to server");
+        close(listen_fd);
+        return -1;
+    }
+    
+    // 3.Make it listen
+    int listen_state = listen(listen_fd, 5);
+    if(listen_state == -1) {
+        perror("Sever: Unable to make the socket listen");
+        close(listen_fd);
+        return -1;
+    }
+    
+    printf("Sever listening on port : %d....\n", PORT);
+
+    return listen_fd;
+}
+
+int accept_client(int listen_fd) {
+
+    // Wait for the clinet-socket connection + Accept it
+    //  4.Accept the first connection
+    struct sockaddr_in clientAddr;
+    clientAddr.sin_family = AF_INET;
+    clientAddr.sin_port = htons(PORT);
+    inet_pton(AF_INET, "127.0.0.1", &clientAddr.sin_addr);
+
+    socklen_t clientAddr_len = sizeof(clientAddr);
+
+    int connected_fd = accept(
+                                listen_fd, 
+                                (struct sockaddr *) &clientAddr, 
+                                &clientAddr_len
+                             );
+    if(connected_fd == -1) {
+        perror("Server: Unable to accept client socket");
+        close(listen_fd);
+        return -1;
+    }
+
+    return connected_fd;
+}
+
+// 3.Initialize List
+void init_list(MessageList *list){
+    list->head = NULL;
+    list->tail = NULL;
+    list->count = 0;
+}
+
+// 4.Add New Message-Node to the LL
+int add_node(MessageList *list, const char *msg){
+    
+    MessageNode *new_node = malloc(sizeof(*new_node));
+    if(new_node == NULL) {
+        perror("Memory allocation filed\n");
+        return -1;
+    }
+
+    new_node->data= strdup(msg);
+    if(new_node->data == NULL) {
+        perror("strdup");
+        free(new_node);
+        return -1;
+    }
+
+    new_node->next = NULL;
+
+    if(list->tail == NULL) {
+        list->head = new_node;
+        list->tail = new_node;
+    } else {
+        list->tail->next = new_node;
+        list->tail = new_node;
+    }
+    list->count++;
+
+    return 0;
+}
+
+// 5.Print LL
+void print_all_msg(const MessageList *list){
+
+    printf("---------- Server : Client's Message - Start--------------\n");
+
+    MessageNode *curr_node = list->head;
+    
+    uint32_t line_no = 0;
+
+    while(curr_node != NULL){
+        line_no++;
+        printf("recv #%d: %s\n", line_no, curr_node->data);
+        curr_node = curr_node->next;
+    }
+    printf("---------- Server : Client's Message - End--------------\n");
+}
+
+int send_all(int conn_fd, MessageList *msgList) {
+
+    MessageNode *curr_node = msgList->head;
+
+    while(curr_node != NULL) {
+    
+        char *temp = curr_node->data;
+        send(conn_fd, temp, strlen(temp), 0);
+
+        char test = '$';
+        send(conn_fd, &test, 1, 0);
+
+        char eom = '!';
+        send(conn_fd, &eom, 1, 0);
+
+        curr_node = curr_node->next;
+    }
+
+    return 0;
+}
+
+int recv_all(int conn_fd, MessageList *ll) {
+
+    // Step-3
+    char *bal_msg __attribute__((cleanup(myFree))) = NULL;
+
+    // Step-2
+    char *temp __attribute__((cleanup(myFree))) = malloc(BUFFER_SIZE);
+
+    //int part = 0;
+    bool isRcom = false;
+
+    while(!isRcom) {
+        
+        // Read the Buffer one-time & get avaiable data in temp
+        Recv_ResultSet recv_rs = one_read_recv(conn_fd, temp);
+
+        // Handle State Suitably
+        if(recv_rs.state == RECV_ERROR){
+            perror("RECV_ERROR");
+            return -1;
+        }
+
+        if(recv_rs.state == RECV_RETRY){
+            continue;
+        }
+
+        if(recv_rs.state == RECV_PEER_CLOSED){
+            isRcom = true;
+            continue;
+        }
+
+        // Prepare final balance data
+        int status = prepare_bal_data(&bal_msg, temp, recv_rs.bytes);
+        if(status == -1) {
+            return -1;
+        }
+
+        // Extract only Full Msg and Add to Linked-List
+        char *bound = NULL;
+
+        int state_token = tokenize_add_node(bal_msg, ll, &bound);
+        if(state_token == -1){
+            return -1;
+        }
+
+        // Recalculate the Balance Data
+        recalculate_bal_data(bal_msg, bound);
+    }
+
+    return 0;
+}
+
+Recv_ResultSet one_read_recv(int conn_fd, char *temp) {
+
+    Recv_ResultSet rs;
+
+    // Step-1
+    ssize_t recv_bytes = recv(conn_fd, temp, BUFFER_SIZE, 0);
+
+    //   STATE : Peer Closed Connection
+    if(recv_bytes == 0) {
+        rs.state = RECV_PEER_CLOSED;
+        rs.bytes = 0;
+        return rs;
+    }
+
+    if(recv_bytes == -1) {
+
+        // STATE: Retry
+        if(errno == EINTR) {
+            rs.state = RECV_RETRY;
+            rs.bytes = -1;
+            return rs;
+        }
+
+        // STATE: Error
+        rs.state = RECV_ERROR;
+        rs.bytes = -1;
+        return rs;
+    }
+    
+    // STATE: Data
+    rs.state = RECV_DATA;
+    rs.bytes = recv_bytes;
+    return rs;
+}
+
+int prepare_bal_data(char **bal_msg_ptr, char *temp, ssize_t bytes) {
+
+    ssize_t recv_bytes = bytes;
+
+    // Step-4
+    ssize_t bal_len = *bal_msg_ptr == NULL ? 0 : strlen(*bal_msg_ptr);
+    ssize_t new_len = bal_len + recv_bytes;
+
+    // Step-5
+    char *temp_loc = realloc(*bal_msg_ptr, new_len+1);
+    if(temp_loc == NULL) {
+        perror("Memory Reallocation failed...\n");
+        return -1;
+    }
+    *bal_msg_ptr = temp_loc;
+    if(bal_len == 0) {
+        **bal_msg_ptr = '\0';
+    }
+
+    // Step-6
+    //strcat(bal_msg, temp);
+    memcpy(*bal_msg_ptr + bal_len, temp, recv_bytes);
+    *(*bal_msg_ptr+new_len) = '\0';
+
+    return 0;
+}
+
+int tokenize_add_node(char *bal_msg, MessageList *ll, char **bound) {
+
+    // Step-7
+    *bound = strrchr(bal_msg, '*');
+    if(*bound != NULL) {
+        **bound = '\0';
+    }
+
+    // Step-8
+    if(strlen(bal_msg) > 0) {
+
+        char *token = strtok(bal_msg, "*");
+
+        while(token != NULL) {
+            
+            int status = add_node(ll, token);
+            if(status == -1) {
+                return -1;
+            }
+
+            token = strtok(NULL, "*");
+        }
+    }
+
+    return 0;
+}
+
+void recalculate_bal_data(char *bal_msg, char *bound) {
+
+    // Step-9
+    //strncpy(bal_msg, bound+1, strlen(bound+1));
+    if(bound != NULL) {
+        ssize_t remain_size = strlen(bound+1);
+        memmove(bal_msg, bound+1, remain_size+1);
+    }
+
+}
+
+void myFree(void *p) {
+    void **pp = (void **)p;
+    free(*pp);
+    *pp = NULL;
+}
