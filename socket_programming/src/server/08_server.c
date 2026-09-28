@@ -336,29 +336,29 @@ Recv_ResultSet one_read_recv(int conn_fd, char *temp) {
     return rs;
 }
 
-int prepare_bal_data(char **bal_msg_ptr, char *temp, ssize_t bytes) {
+int prepare_bal_data(char **caller_var_stack_addr, char *temp, ssize_t bytes) {
 
     ssize_t recv_bytes = bytes;
 
     // Step-4
-    ssize_t bal_len = *bal_msg_ptr == NULL ? 0 : strlen(*bal_msg_ptr);
+    ssize_t bal_len = *caller_var_stack_addr == NULL ? 0 : strlen(*caller_var_stack_addr);
     ssize_t new_len = bal_len + recv_bytes;
 
     // Step-5
-    char *temp_loc = realloc(*bal_msg_ptr, new_len+1);
+    char *temp_loc = realloc(*caller_var_stack_addr, new_len+1);
     if(temp_loc == NULL) {
         perror("Memory Reallocation failed...\n");
         return -1;
     }
-    *bal_msg_ptr = temp_loc;
+    *caller_var_stack_addr = temp_loc;
     if(bal_len == 0) {
-        **bal_msg_ptr = '\0';
+        **caller_var_stack_addr = '\0';
     }
 
     // Step-6
     //strcat(bal_msg, temp);
-    memcpy(*bal_msg_ptr + bal_len, temp, recv_bytes);
-    *(*bal_msg_ptr+new_len) = '\0';
+    memcpy(*caller_var_stack_addr + bal_len, temp, recv_bytes);
+    *(*caller_var_stack_addr+new_len) = '\0';
 
     return 0;
 }

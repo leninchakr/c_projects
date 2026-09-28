@@ -64,6 +64,8 @@ BDD Macros	Unity/extras/bdd/readme.md	/^### BDD Macros$/;"	S	section:Unity Proje
 BDD Tester	Unity/extras/bdd/test/meson.build	/^project('BDD Tester', 'c')$/;"	P
 BIT_DIRECTION_DOWN	Unity/examples/example_5/src/ProductionCode.h	/^    BIT_DIRECTION_DOWN,$/;"	e	enum:__anon8bc8adf90103
 BIT_DIRECTION_UP	Unity/examples/example_5/src/ProductionCode.h	/^    BIT_DIRECTION_UP,$/;"	e	enum:__anon8bc8adf90103
+BUFFER_SIZE	include/09/server/server.h	/^#define BUFFER_SIZE /;"	d
+BUFFER_SIZE	src/09/client/client.c	/^#define BUFFER_SIZE /;"	d	file:
 BUFFER_SIZE	src/client/05_client.c	/^#define BUFFER_SIZE /;"	d	file:
 BUFFER_SIZE	src/server/07_server.c	/^#define BUFFER_SIZE /;"	d	file:
 BUFFER_SIZE	src/server/08_server.c	/^#define BUFFER_SIZE /;"	d	file:
@@ -285,16 +287,24 @@ Maximum Data Type Width Is Configurable	Unity/docs/UnityAssertionsReference.md	/
 Memorable	Unity/docs/ThrowTheSwitchCodingStandard.md	/^This helps users avoid having to remember each macro's details.$/;"	S	section:ThrowTheSwitch.org Coding Standard""Naming Things
 Memory Assertions	Unity/README.md	/^### Memory Assertions$/;"	S	section:Unity Test ![CI][]""Unity Assertion Summary
 Meson Generator - Test Runner	Unity/docs/MesonGeneratorRunner.md	/^# Meson Generator - Test Runner$/;"	c
+MessageList	include/09/server/server.h	/^typedef struct MessageList {$/;"	s
+MessageList	include/09/server/server.h	/^} MessageList;$/;"	t	typeref:struct:MessageList
 MessageList	src/server/07_server.c	/^typedef struct MessageList {$/;"	s	file:
 MessageList	src/server/07_server.c	/^} MessageList;$/;"	t	typeref:struct:MessageList	file:
 MessageList	src/server/08_server.c	/^typedef struct MessageList {$/;"	s	file:
 MessageList	src/server/08_server.c	/^} MessageList;$/;"	t	typeref:struct:MessageList	file:
+MessageNode	include/09/server/server.h	/^typedef struct MessageNode {$/;"	s
+MessageNode	include/09/server/server.h	/^} MessageNode;$/;"	t	typeref:struct:MessageNode
+MessageNode	src/09/client/client.c	/^struct MessageNode {$/;"	s	file:
+MessageNode	src/09/client/client.c	/^typedef struct MessageNode MessageNode;$/;"	t	typeref:struct:MessageNode	file:
 MessageNode	src/client/05_client.c	/^struct MessageNode {$/;"	s	file:
 MessageNode	src/client/05_client.c	/^typedef struct MessageNode MessageNode;$/;"	t	typeref:struct:MessageNode	file:
 MessageNode	src/server/07_server.c	/^typedef struct MessageNode {$/;"	s	file:
 MessageNode	src/server/07_server.c	/^} MessageNode;$/;"	t	typeref:struct:MessageNode	file:
 MessageNode	src/server/08_server.c	/^typedef struct MessageNode {$/;"	s	file:
 MessageNode	src/server/08_server.c	/^} MessageNode;$/;"	t	typeref:struct:MessageNode	file:
+Message_LL	src/09/client/client.c	/^struct Message_LL {$/;"	s	file:
+Message_LL	src/09/client/client.c	/^typedef struct Message_LL Message_LL;$/;"	t	typeref:struct:Message_LL	file:
 Message_LL	src/client/05_client.c	/^struct Message_LL {$/;"	s	file:
 Message_LL	src/client/05_client.c	/^typedef struct Message_LL Message_LL;$/;"	t	typeref:struct:Message_LL	file:
 Miscellaneous	Unity/docs/UnityConfigurationGuide.md	/^### Miscellaneous$/;"	S	section:Unity Configuration Guide""The Options
@@ -323,6 +333,8 @@ Our Pledge	Unity/docs/CODE_OF_CONDUCT.md	/^## Our Pledge$/;"	s	chapter:ThrowTheS
 Our Standards	Unity/docs/CODE_OF_CONDUCT.md	/^## Our Standards$/;"	s	chapter:ThrowTheSwitch.org Code of Conduct
 Overview of the Documents	Unity/docs/UnityGettingStartedGuide.md	/^### Overview of the Documents$/;"	S	section:Unity - Getting Started""Welcome
 Overview of the Folders	Unity/docs/UnityGettingStartedGuide.md	/^### Overview of the Folders$/;"	S	section:Unity - Getting Started""Welcome
+PORT	include/09/server/server.h	/^#define PORT /;"	d
+PORT	src/09/client/client.c	/^#define PORT /;"	d	file:
 PORT	src/client/01_client.c	/^#define PORT /;"	d	file:
 PORT	src/client/02_client.c	/^#define PORT /;"	d	file:
 PORT	src/client/03_client.c	/^#define PORT /;"	d	file:
@@ -340,9 +352,13 @@ Parameterized tests provided macros	Unity/docs/UnityHelperScriptsGuide.md	/^####
 ParseOutput	Unity/auto/parse_output.rb	/^class ParseOutput$/;"	c
 Pointer Assertions	Unity/README.md	/^### Pointer Assertions$/;"	S	section:Unity Test ![CI][]""Unity Assertion Summary
 PointerPair	Unity/extras/fixture/src/unity_fixture.c	/^struct PointerPair$/;"	s	file:
+RECV_DATA	include/09/server/server.h	/^    RECV_DATA,$/;"	e	enum:__anonbe7d10630103
 RECV_DATA	src/server/08_server.c	/^    RECV_DATA,$/;"	e	enum:__anon51fdbdd10103	file:
+RECV_ERROR	include/09/server/server.h	/^    RECV_ERROR$/;"	e	enum:__anonbe7d10630103
 RECV_ERROR	src/server/08_server.c	/^    RECV_ERROR$/;"	e	enum:__anon51fdbdd10103	file:
+RECV_PEER_CLOSED	include/09/server/server.h	/^    RECV_PEER_CLOSED,$/;"	e	enum:__anonbe7d10630103
 RECV_PEER_CLOSED	src/server/08_server.c	/^    RECV_PEER_CLOSED,$/;"	e	enum:__anon51fdbdd10103	file:
+RECV_RETRY	include/09/server/server.h	/^    RECV_RETRY,$/;"	e	enum:__anonbe7d10630103
 RECV_RETRY	src/server/08_server.c	/^    RECV_RETRY,$/;"	e	enum:__anon51fdbdd10103	file:
 RETURN_IF_FAIL_OR_IGNORE	Unity/src/unity.c	/^#define RETURN_IF_FAIL_OR_IGNORE /;"	d	file:
 RUBY_PLATFORM	Unity/auto/colour_prompt.rb	/^    if RUBY_PLATFORM =~ \/(win|w)32$\/$/;"	C	method:ColourCommandLine.change_to
@@ -380,7 +396,9 @@ RUN_TEST_NO_ARGS	Unity/test/expectdata/testsample_param.c	/^#define RUN_TEST_NO_
 RakefileHelpers	Unity/auto/test_file_filter.rb	/^module RakefileHelpers$/;"	m
 RakefileHelpers	Unity/test/rakefile_helper.rb	/^module RakefileHelpers$/;"	m
 Readable	Unity/docs/ThrowTheSwitchCodingStandard.md	/^4. Memorable$/;"	S	section:ThrowTheSwitch.org Coding Standard""Naming Things
+RecvState	include/09/server/server.h	/^} RecvState;$/;"	t	typeref:enum:__anonbe7d10630103
 RecvState	src/server/08_server.c	/^} RecvState;$/;"	t	typeref:enum:__anon51fdbdd10103	file:
+Recv_ResultSet	include/09/server/server.h	/^} Recv_ResultSet;$/;"	t	typeref:struct:__anonbe7d10630208
 Recv_ResultSet	src/server/08_server.c	/^} Recv_ResultSet;$/;"	t	typeref:struct:__anon51fdbdd10208	file:
 RepeatCount	Unity/extras/fixture/src/unity_fixture_internals.h	/^    unsigned int RepeatCount;$/;"	m	struct:UNITY_FIXTURE_T	typeref:typename:unsigned int
 Ruby Details	Unity/docs/ThrowTheSwitchCodingStandard.md	/^We think they are ugly too.$/;"	s	chapter:ThrowTheSwitch.org Coding Standard
@@ -389,6 +407,7 @@ RunAllTests	Unity/examples/example_2/test/test_runners/all_tests.c	/^static void
 Running Test Functions	Unity/docs/UnityGettingStartedGuide.md	/^### Running Test Functions$/;"	S	section:Unity - Getting Started""How to Create A Test File
 SECOND_PARAM	Unity/extras/memory/test/unity_memory_Test.c	/^#define SECOND_PARAM(/;"	d	file:
 SECOND_PARAM	Unity/test/tests/self_assessment_utils.h	/^#define SECOND_PARAM(/;"	d
+SERVER_H	include/09/server/server.h	/^#define SERVER_H$/;"	d
 SPY_BUFFER_MAX	Unity/test/tests/self_assessment_utils.h	/^#define SPY_BUFFER_MAX /;"	d
 SRC	Unity/extras/fixture/test/Makefile	/^SRC = ..\/src\/unity_fixture.c \\$/;"	m
 SRC	Unity/extras/memory/test/Makefile	/^SRC = ..\/src\/unity_memory.c \\$/;"	m
@@ -1642,6 +1661,8 @@ With a Little Help From Our Friends	Unity/docs/UnityHelperScriptsGuide.md	/^## W
 YamlHelper	Unity/auto/yaml_helper.rb	/^module YamlHelper$/;"	m
 [No Brown M&M's](https://en.wikipedia.org/wiki/Van_Halen#Contract_riders)	Unity/docs/CONTRIBUTING.md	/^## [No Brown M&M's](https:\/\/en.wikipedia.org\/wiki\/Van_Halen#Contract_riders)$/;"	s	chapter:Contributing to a ThrowTheSwitch.org Project
 \\_MESSAGE	Unity/README.md	/^### \\_MESSAGE$/;"	S	section:Unity Test ![CI][]""Unity Assertion Summary
+_DEFAULT_SOURCE	include/09/server/server.h	/^#define _DEFAULT_SOURCE$/;"	d
+_DEFAULT_SOURCE	src/09/client/client.c	/^#define _DEFAULT_SOURCE$/;"	d	file:
 _DEFAULT_SOURCE	src/client/05_client.c	/^#define _DEFAULT_SOURCE$/;"	d	file:
 _DEFAULT_SOURCE	src/server/07_server.c	/^#define _DEFAULT_SOURCE$/;"	d	file:
 _DEFAULT_SOURCE	src/server/08_server.c	/^#define _DEFAULT_SOURCE$/;"	d	file:
@@ -1659,6 +1680,8 @@ __anon70218c8e0103	Unity/test/tests/types_for_test.h	/^typedef enum {$/;"	g
 __anon8019368f0103	Unity/examples/example_5/test/unity_detail_config.h	/^typedef enum {$/;"	g
 __anon8917f9cf0108	Unity/test/tests/test_unity_core.c	/^struct {$/;"	s	function:testUnitySizeInitializationReminder	file:
 __anon8bc8adf90103	Unity/examples/example_5/src/ProductionCode.h	/^typedef enum {$/;"	g
+__anonbe7d10630103	include/09/server/server.h	/^typedef enum {$/;"	g
+__anonbe7d10630208	include/09/server/server.h	/^typedef struct {$/;"	s
 __anonfc6f5c0c0108	Unity/examples/example_5/test/TestProductionCode.c	/^typedef struct {$/;"	s	file:
 __init__	Unity/auto/stylize_as_junit.py	/^    def __init__(self):$/;"	m	class:UnityTestSummary
 __init__	Unity/auto/unity_test_summary.py	/^    def __init__(self):$/;"	m	class:UnityTestSummary
@@ -1898,7 +1921,10 @@ __init__	Unity/auto/unity_test_summary.py	/^    def __init__(self):$/;"	m	class:
 `main_export_decl`	Unity/docs/UnityHelperScriptsGuide.md	/^##### `main_export_decl`$/;"	T	subsubsection:Unity Helper Scripts""With a Little Help From Our Friends""`generate_test_runner.rb`""Options accepted by generate_test_runner.rb
 `unity_test_summary.rb`	Unity/docs/UnityHelperScriptsGuide.md	/^### `unity_test_summary.rb`$/;"	S	section:Unity Helper Scripts""With a Little Help From Our Friends
 a_dep	Unity/examples/example_4/src/meson.build	/^a_dep = declare_dependency(link_with: a_lib, include_directories: inc_dir)$/;"	V
+accept_client	src/09/server/server.c	/^int accept_client(int listen_fd) {$/;"	f	typeref:typename:int
 accept_client	src/server/08_server.c	/^int accept_client(int listen_fd) {$/;"	f	typeref:typename:int
+add_node	src/09/client/client.c	/^void add_node(char *data, Message_LL *ll){$/;"	f	typeref:typename:void
+add_node	src/09/server/server.c	/^int add_node(MessageList *list, const char *msg){$/;"	f	typeref:typename:int
 add_node	src/client/05_client.c	/^void add_node(char *data, Message_LL *ll){$/;"	f	typeref:typename:void
 add_node	src/server/07_server.c	/^int add_node(MessageList *list, const char *msg){$/;"	f	typeref:typename:int
 add_node	src/server/08_server.c	/^int add_node(MessageList *list, const char *msg){$/;"	f	typeref:typename:int
@@ -1923,6 +1949,7 @@ build_command_string	Unity/examples/example_3/rakefile_helper.rb	/^def build_com
 build_command_string	Unity/test/rakefile_helper.rb	/^  def build_command_string(hash, values, defines = nil)$/;"	f	module:RakefileHelpers
 build_fixture	Unity/meson.build	/^build_fixture = get_option('extension_fixture')$/;"	V
 build_memory	Unity/meson.build	/^build_memory = get_option('extension_memory')$/;"	V
+bytes	include/09/server/server.h	/^    ssize_t bytes;$/;"	m	struct:__anonbe7d10630208	typeref:typename:ssize_t
 bytes	src/server/08_server.c	/^    ssize_t bytes;$/;"	m	struct:__anon51fdbdd10208	typeref:typename:ssize_t	file:
 callback_t	Unity/examples/example_5/src/ProductionCode.h	/^typedef void callback_t(int position, int bit_value);$/;"	t	typeref:typename:void ()(int position,int bit_value)
 calloc	Unity/extras/memory/src/unity_memory.h	/^#define calloc /;"	d
@@ -1951,6 +1978,8 @@ configure_clean	Unity/test/rakefile_helper.rb	/^  def configure_clean$/;"	f	modu
 configure_toolchain	Unity/examples/example_3/rakefile_helper.rb	/^def configure_toolchain(config_file = DEFAULT_CONFIG_FILE)$/;"	f
 configure_toolchain	Unity/test/rakefile_helper.rb	/^  def configure_toolchain(config_file = DEFAULT_CONFIG_FILE)$/;"	f	module:RakefileHelpers
 count	Unity/extras/memory/test/unity_output_Spy.c	/^static int count;$/;"	v	typeref:typename:int	file:
+count	include/09/server/server.h	/^    size_t count;$/;"	m	struct:MessageList	typeref:typename:size_t
+count	src/09/client/client.c	/^    int count;$/;"	m	struct:Message_LL	typeref:typename:int	file:
 count	src/client/05_client.c	/^    int count;$/;"	m	struct:Message_LL	typeref:typename:int	file:
 count	src/server/07_server.c	/^    size_t count;$/;"	m	struct:MessageList	typeref:typename:size_t	file:
 count	src/server/08_server.c	/^    size_t count;$/;"	m	struct:MessageList	typeref:typename:size_t	file:
@@ -1964,6 +1993,7 @@ create_externs	Unity/auto/generate_test_runner.rb	/^  def create_externs(output,
 create_filename	Unity/auto/generate_module.rb	/^  def create_filename(part1, part2 = '')$/;"	f
 create_h_file	Unity/auto/generate_test_runner.rb	/^  def create_h_file(output, filename, tests, headers, used_mocks)$/;"	f	class:UnityTestRunnerGenerator
 create_header	Unity/auto/generate_test_runner.rb	/^  def create_header(output, mocks, headers = [])$/;"	f	class:UnityTestRunnerGenerator
+create_listen_socket	src/09/server/server.c	/^int create_listen_socket(void) {$/;"	f	typeref:typename:int
 create_listen_socket	src/server/08_server.c	/^int create_listen_socket(void) {$/;"	f	typeref:typename:int
 create_main	Unity/auto/generate_test_runner.rb	/^  def create_main(output, filename, tests, used_mocks)$/;"	f	class:UnityTestRunnerGenerator
 create_mock_management	Unity/auto/generate_test_runner.rb	/^  def create_mock_management(output, mock_headers)$/;"	f	class:UnityTestRunnerGenerator
@@ -1995,6 +2025,8 @@ d	Unity/src/unity.c	/^    double d;$/;"	m	union:__anon229c356e010a	typeref:typen
 d_zero	Unity/test/tests/self_assessment_utils.h	/^static const UNITY_DOUBLE d_zero = 0.0;$/;"	v	typeref:typename:const UNITY_DOUBLE
 dashRNotLast	Unity/extras/fixture/test/unity_fixture_Test.c	/^static const char* dashRNotLast[] = {$/;"	v	typeref:typename:const char * []	file:
 data	Unity/extras/fixture/test/template_fixture_tests.c	/^static int data = -1;$/;"	v	typeref:typename:int	file:
+data	include/09/server/server.h	/^    char *data;$/;"	m	struct:MessageNode	typeref:typename:char *
+data	src/09/client/client.c	/^    char *data;$/;"	m	struct:MessageNode	typeref:typename:char *	file:
 data	src/client/05_client.c	/^    char *data;$/;"	m	struct:MessageNode	typeref:typename:char *	file:
 data	src/server/07_server.c	/^    char *data;$/;"	m	struct:MessageNode	typeref:typename:char *	file:
 data	src/server/08_server.c	/^    char *data;$/;"	m	struct:MessageNode	typeref:typename:char *	file:
@@ -2074,6 +2106,8 @@ group	Unity/extras/fixture/test/unity_fixture_Test.c	/^static const char* group[
 groupExact	Unity/extras/fixture/test/unity_fixture_Test.c	/^static const char* groupExact[] = {$/;"	v	typeref:typename:const char * []	file:
 groupSelected	Unity/extras/fixture/src/unity_fixture.c	/^static int groupSelected(const char* group)$/;"	f	typeref:typename:int	file:
 guard_space	Unity/extras/memory/src/unity_memory.c	/^    size_t guard_space;$/;"	m	struct:GuardBytes	typeref:typename:size_t	file:
+head	include/09/server/server.h	/^    MessageNode *head;$/;"	m	struct:MessageList	typeref:typename:MessageNode *
+head	src/09/client/client.c	/^    MessageNode *head;$/;"	m	struct:Message_LL	typeref:typename:MessageNode *	file:
 head	src/client/05_client.c	/^    MessageNode *head;$/;"	m	struct:Message_LL	typeref:typename:MessageNode *	file:
 head	src/server/07_server.c	/^    MessageNode *head;$/;"	m	struct:MessageList	typeref:typename:MessageNode *	file:
 head	src/server/08_server.c	/^    MessageNode *head;$/;"	m	struct:MessageList	typeref:typename:MessageNode *	file:
@@ -2092,6 +2126,7 @@ ilinkarm	Unity/test/targets/iar_arm.yml	/^  :ilinkarm: &ilinkarm "C:\\\\Program 
 inc	Unity/examples/example_1/meson.build	/^inc = include_directories('src')$/;"	V
 inc_dir	Unity/examples/example_4/src/meson.build	/^inc_dir = include_directories('.')$/;"	V
 indexSpyBuffer	Unity/test/tests/self_assessment_utils.h	/^static UNITY_COUNTER_TYPE indexSpyBuffer;$/;"	v	typeref:typename:UNITY_COUNTER_TYPE
+init_list	src/09/server/server.c	/^void init_list(MessageList *list){$/;"	f	typeref:typename:void
 init_list	src/server/07_server.c	/^void init_list(MessageList *list){$/;"	f	typeref:typename:void
 init_list	src/server/08_server.c	/^void init_list(MessageList *list){$/;"	f	typeref:typename:void
 initialize	Unity/auto/colour_prompt.rb	/^  def initialize$/;"	f	class:ColourCommandLine
@@ -2150,6 +2185,8 @@ main	Unity/test/expectdata/testsample_run2.c	/^int main(void)$/;"	f	typeref:type
 main	Unity/test/expectdata/testsample_yaml.c	/^int main(void)$/;"	f	typeref:typename:int
 main	Unity/test/testdata/testRunnerGenerator.c	/^int main(void)$/;"	f	typeref:typename:int
 main	Unity/test/testdata/testRunnerGeneratorWithMocks.c	/^int main(void)$/;"	f	typeref:typename:int
+main	src/09/client/client.c	/^int main(void) {$/;"	f	typeref:typename:int
+main	src/09/server/server.c	/^int main(void) {$/;"	f	typeref:typename:int
 main	src/client/01_client.c	/^int main(void) {$/;"	f	typeref:typename:int
 main	src/client/02_client.c	/^int main(void) {$/;"	f	typeref:typename:int
 main	src/client/03_client.c	/^int main(void) {$/;"	f	typeref:typename:int
@@ -2163,6 +2200,7 @@ main	src/server/05_server.c	/^int main(void) {$/;"	f	typeref:typename:int
 main	src/server/06_server.c	/^int main(void) {$/;"	f	typeref:typename:int
 main	src/server/07_server.c	/^int main(void) {$/;"	f	typeref:typename:int
 main	src/server/08_server.c	/^int main(void) {$/;"	f	typeref:typename:int
+main	tests/09/server/test_server.c	/^int main(void)$/;"	f	typeref:typename:int
 malloc	Unity/extras/memory/src/unity_memory.h	/^#define malloc /;"	d
 malloc_count	Unity/extras/memory/src/unity_memory.c	/^static int malloc_count;$/;"	v	typeref:typename:int	file:
 malloc_fail_countdown	Unity/extras/memory/src/unity_memory.c	/^static int malloc_fail_countdown = MALLOC_DONT_FAIL;$/;"	v	typeref:typename:int	file:
@@ -2173,6 +2211,8 @@ mockMock_Init_Counter	Unity/test/testdata/cmock.h	/^int mockMock_Init_Counter = 
 mockMock_Verify	Unity/test/testdata/cmock.h	/^void mockMock_Verify(void)         { mockMock_Verify_Counter++;  }$/;"	f	typeref:typename:void
 mockMock_Verify_Counter	Unity/test/testdata/cmock.h	/^int mockMock_Verify_Counter = 0;$/;"	v	typeref:typename:int
 multiple	Unity/extras/fixture/test/unity_fixture_Test.c	/^static const char* multiple[] = {$/;"	v	typeref:typename:const char * []	file:
+myFree	src/09/client/client.c	/^void myFree(void *ptr){$/;"	f	typeref:typename:void
+myFree	src/09/server/server.c	/^void myFree(void *p) {$/;"	f	typeref:typename:void
 myFree	src/client/05_client.c	/^void myFree(void *ptr){$/;"	f	typeref:typename:void
 myFree	src/server/07_server.c	/^void myFree(void *p) {$/;"	f	typeref:typename:void
 myFree	src/server/08_server.c	/^void myFree(void *p) {$/;"	f	typeref:typename:void
@@ -2180,6 +2220,8 @@ name	Unity/extras/fixture/test/unity_fixture_Test.c	/^static const char* name[] 
 name	Unity/library.json	/^  "name": "Unity",$/;"	s
 nameExact	Unity/extras/fixture/test/unity_fixture_Test.c	/^static const char* nameExact[] = {$/;"	v	typeref:typename:const char * []	file:
 neutralize_filename	Unity/auto/generate_module.rb	/^  def neutralize_filename(name, start_cap: true)$/;"	f
+next	include/09/server/server.h	/^    struct MessageNode *next;$/;"	m	struct:MessageNode	typeref:struct:MessageNode *
+next	src/09/client/client.c	/^    struct MessageNode *next;$/;"	m	struct:MessageNode	typeref:struct:MessageNode *	file:
 next	src/client/05_client.c	/^    struct MessageNode *next;$/;"	m	struct:MessageNode	typeref:struct:MessageNode *	file:
 next	src/server/07_server.c	/^    struct MessageNode *next;$/;"	m	struct:MessageNode	typeref:struct:MessageNode *	file:
 next	src/server/08_server.c	/^    struct MessageNode *next;$/;"	m	struct:MessageNode	typeref:struct:MessageNode *	file:
@@ -2187,6 +2229,7 @@ noOptions	Unity/extras/fixture/test/unity_fixture_Test.c	/^static const char* no
 noStdlibMalloc	Unity/extras/fixture/test/Makefile	/^noStdlibMalloc: $(BUILD_DIR)$/;"	t
 noStdlibMalloc	Unity/extras/memory/test/Makefile	/^noStdlibMalloc: $(BUILD_DIR)$/;"	t
 old_value	Unity/extras/fixture/src/unity_fixture.c	/^    void* old_value;$/;"	m	struct:PointerPair	typeref:typename:void *	file:
+one_read_recv	src/09/server/server.c	/^Recv_ResultSet one_read_recv(int conn_fd, char *temp) {$/;"	f	typeref:typename:Recv_ResultSet
 one_read_recv	src/server/08_server.c	/^Recv_ResultSet one_read_recv(int conn_fd, char *temp) {$/;"	f	typeref:typename:Recv_ResultSet
 only_files	Unity/auto/test_file_filter.rb	/^    attr_accessor :all_files, :only_files, :exclude_files$/;"	A	class:RakefileHelpers.TestFileFilter
 only_files=	Unity/auto/test_file_filter.rb	/^    attr_accessor :all_files, :only_files, :exclude_files$/;"	A	class:RakefileHelpers.TestFileFilter
@@ -2217,11 +2260,14 @@ pointer3	Unity/extras/fixture/test/unity_fixture_Test.c	/^static int* pointer3 =
 pointer_index	Unity/extras/fixture/src/unity_fixture.c	/^static int pointer_index = 0;$/;"	v	typeref:typename:int	file:
 pointer_store	Unity/extras/fixture/src/unity_fixture.c	/^static struct PointerPair pointer_store[UNITY_MAX_POINTERS];$/;"	v	typeref:struct:PointerPair[]	file:
 posix_colour	Unity/auto/colour_prompt.rb	/^  def posix_colour(colour)$/;"	f	class:ColourCommandLine
-prepare_bal_data	src/server/08_server.c	/^int prepare_bal_data(char *bal_msg, char *temp, ssize_t bytes) {$/;"	f	typeref:typename:int
+prepare_bal_data	src/09/server/server.c	/^int prepare_bal_data(char **bal_msg_ptr, char *temp, ssize_t bytes) {$/;"	f	typeref:typename:int
+prepare_bal_data	src/server/08_server.c	/^int prepare_bal_data(char **caller_var_stack_addr, char *temp, ssize_t bytes) {$/;"	f	typeref:typename:int
 prepare_fixture_line	Unity/auto/parse_output.rb	/^  def prepare_fixture_line(line)$/;"	f	class:ParseOutput
 printFloatValue	Unity/test/tests/test_unity_floats.c	/^static void printFloatValue(float f)$/;"	f	typeref:typename:void	file:
+print_all_msg	src/09/server/server.c	/^void print_all_msg(const MessageList *list){$/;"	f	typeref:typename:void
 print_all_msg	src/server/07_server.c	/^void print_all_msg(MessageList *list){$/;"	f	typeref:typename:void
 print_all_msg	src/server/08_server.c	/^void print_all_msg(const MessageList *list){$/;"	f	typeref:typename:void
+print_ll	src/09/client/client.c	/^void print_ll(Message_LL *ll) {$/;"	f	typeref:typename:void
 print_ll	src/client/05_client.c	/^void print_ll(Message_LL *ll) {$/;"	f	typeref:typename:void
 process	Unity/auto/parse_output.rb	/^  def process(file_name)$/;"	f	class:ParseOutput
 push_xml_output_failed	Unity/auto/parse_output.rb	/^  def push_xml_output_failed(test_name, reason, execution_time = 0)$/;"	f	class:ParseOutput
@@ -2240,14 +2286,15 @@ qwiktest_ThisTestPassesWhenNoSetupRan	Unity/test/testdata/testRunnerGeneratorWit
 qwiktest_ThisTestPassesWhenNoTeardownRan	Unity/test/testdata/testRunnerGenerator.c	/^void qwiktest_ThisTestPassesWhenNoTeardownRan(void)$/;"	f	typeref:typename:void
 qwiktest_ThisTestPassesWhenNoTeardownRan	Unity/test/testdata/testRunnerGeneratorWithMocks.c	/^void qwiktest_ThisTestPassesWhenNoTeardownRan(void)$/;"	f	typeref:typename:void
 realloc	Unity/extras/memory/src/unity_memory.h	/^#define realloc /;"	d
+recalculate_bal_data	src/09/server/server.c	/^void recalculate_bal_data(char *bal_msg, char *bound) {$/;"	f	typeref:typename:void
 recalculate_bal_data	src/server/08_server.c	/^void recalculate_bal_data(char *bal_msg, char *bound) {$/;"	f	typeref:typename:void
+recv_all	src/09/server/server.c	/^int recv_all(int conn_fd, MessageList *ll) {$/;"	f	typeref:typename:int
 recv_all	src/server/07_server.c	/^int recv_all(int conn_fd, MessageList *msgList) {$/;"	f	typeref:typename:int
-recv_all	src/server/08_server.c	/^int recv_all(int conn_fd, MessageList *msgList) {$/;"	f	typeref:typename:int
+recv_all	src/server/08_server.c	/^int recv_all(int conn_fd, MessageList *ll) {$/;"	f	typeref:typename:int
+recv_from_server	src/09/client/client.c	/^int recv_from_server(int server_fd, Message_LL * recv_msg_ll) {$/;"	f	typeref:typename:int
 recv_from_server	src/client/05_client.c	/^int recv_from_server(int server_fd, Message_LL * recv_msg_ll) {$/;"	f	typeref:typename:int
 recv_full	src/client/04_client.c	/^bool recv_full(int to_server_fd, char *server_msg, ssize_t server_msg_size) {$/;"	f	typeref:typename:bool
 recv_own	src/server/07_server.c	/^int recv_own(int conn_fd, MessageList *ll) {$/;"	f	typeref:typename:int
-recv_own	src/server/08_server.c	/^int recv_own(int conn_fd, MessageList *ll) {$/;"	f	typeref:typename:int
-recv_own_refactor	src/server/08_server.c	/^int recv_own_refactor(int conn_fd, MessageList *ll) {$/;"	f	typeref:typename:int
 release_memory	Unity/extras/memory/src/unity_memory.c	/^static void release_memory(void* mem)$/;"	f	typeref:typename:void	file:
 repeat	Unity/extras/fixture/test/unity_fixture_Test.c	/^static const char* repeat[] = {$/;"	v	typeref:typename:const char * []	file:
 report	Unity/auto/colour_reporter.rb	/^def report(message)$/;"	f
@@ -2306,8 +2353,10 @@ savedNameExact	Unity/extras/fixture/test/unity_fixture_Test.c	/^static const cha
 savedRepeat	Unity/extras/fixture/test/unity_fixture_Test.c	/^static unsigned int savedRepeat;$/;"	v	typeref:typename:unsigned int	file:
 savedVerbose	Unity/extras/fixture/test/unity_fixture_Test.c	/^static int savedVerbose;$/;"	v	typeref:typename:int	file:
 selected	Unity/extras/fixture/src/unity_fixture.c	/^static int selected(const char* filter, const char* select, const char* name)$/;"	f	typeref:typename:int	file:
+send_all	src/09/server/server.c	/^int send_all(int conn_fd, MessageList *msgList) {$/;"	f	typeref:typename:int
 send_all	src/server/07_server.c	/^int send_all(int conn_fd, MessageList *msgList) {$/;"	f	typeref:typename:int
 send_all	src/server/08_server.c	/^int send_all(int conn_fd, MessageList *msgList) {$/;"	f	typeref:typename:int
+send_all_2_server	src/09/client/client.c	/^bool send_all_2_server(int  server_fd, Message_LL *ll) {$/;"	f	typeref:typename:bool
 send_all_2_server	src/client/05_client.c	/^bool send_all_2_server(int  server_fd, Message_LL *ll) {$/;"	f	typeref:typename:bool
 send_all_msg_from_server	src/server/06_server.c	/^bool send_all_msg_from_server(int connected_fd, const char *full_msg_ptr) {$/;"	f	typeref:typename:bool
 send_all_msg_to_server	src/client/02_client.c	/^bool send_all_msg_to_server(int to_server_fd, const char *full_msg) {$/;"	f	typeref:typename:bool
@@ -2333,6 +2382,7 @@ setUp	Unity/test/tests/test_unity_integers_64.c	/^void setUp(void)$/;"	f	typeref
 setUp	Unity/test/tests/test_unity_memory.c	/^void setUp(void)$/;"	f	typeref:typename:void
 setUp	Unity/test/tests/test_unity_parameterized.c	/^void setUp(void)$/;"	f	typeref:typename:void
 setUp	Unity/test/tests/test_unity_strings.c	/^void setUp(void)$/;"	f	typeref:typename:void
+setUp	tests/09/server/test_server.c	/^void setUp(void)$/;"	f	typeref:typename:void
 set_output	Unity/auto/stylize_as_junit.py	/^    def set_output(self, output):$/;"	m	class:UnityTestSummary
 set_root_path	Unity/auto/stylize_as_junit.py	/^    def set_root_path(self, path):$/;"	m	class:UnityTestSummary
 set_root_path	Unity/auto/unity_test_summary.py	/^    def set_root_path(self, path):$/;"	m	class:UnityTestSummary
@@ -2362,6 +2412,7 @@ src1	Unity/examples/example_1/meson.build	/^src1 = files([$/;"	V
 src2	Unity/examples/example_1/meson.build	/^src2 = files([$/;"	V
 startFlushSpy	Unity/test/tests/self_assessment_utils.h	/^void startFlushSpy(void)$/;"	f	typeref:typename:void
 startPutcharSpy	Unity/test/tests/self_assessment_utils.h	/^void startPutcharSpy(void)$/;"	f	typeref:typename:void
+state	include/09/server/server.h	/^    RecvState state;$/;"	m	struct:__anonbe7d10630208	typeref:typename:RecvState
 state	src/server/08_server.c	/^    RecvState state;$/;"	m	struct:__anon51fdbdd10208	typeref:typename:RecvState	file:
 suiteSetUp	Unity/test/tests/test_unity_parameterized.c	/^void suiteSetUp(void)$/;"	f	typeref:typename:void
 suite_setup	Unity/test/expectdata/testsample_mock_new2.c	/^static int suite_setup(void)$/;"	f	typeref:typename:int	file:
@@ -2383,6 +2434,8 @@ support_int64	Unity/meson.build	/^support_int64 = get_option('support_int64')$/;
 support_int64	Unity/meson_options.txt	/^option('support_int64', type: 'boolean', value: false, description: 'Whether to enable support f/;"	b
 tackit	Unity/examples/example_3/rakefile_helper.rb	/^def tackit(strings)$/;"	f
 tackit	Unity/test/rakefile_helper.rb	/^  def tackit(strings)$/;"	f	module:RakefileHelpers
+tail	include/09/server/server.h	/^    MessageNode *tail;$/;"	m	struct:MessageList	typeref:typename:MessageNode *
+tail	src/09/client/client.c	/^    MessageNode *tail;$/;"	m	struct:Message_LL	typeref:typename:MessageNode *	file:
 tail	src/client/05_client.c	/^    MessageNode *tail;$/;"	m	struct:Message_LL	typeref:typename:MessageNode *	file:
 tail	src/server/07_server.c	/^    MessageNode *tail;$/;"	m	struct:MessageList	typeref:typename:MessageNode *	file:
 tail	src/server/08_server.c	/^    MessageNode *tail;$/;"	m	struct:MessageList	typeref:typename:MessageNode *	file:
@@ -2413,6 +2466,7 @@ tearDown	Unity/test/tests/test_unity_integers_64.c	/^void tearDown(void)$/;"	f	t
 tearDown	Unity/test/tests/test_unity_memory.c	/^void tearDown(void)$/;"	f	typeref:typename:void
 tearDown	Unity/test/tests/test_unity_parameterized.c	/^void tearDown(void)$/;"	f	typeref:typename:void
 tearDown	Unity/test/tests/test_unity_strings.c	/^void tearDown(void)$/;"	f	typeref:typename:void
+tearDown	tests/09/server/test_server.c	/^void tearDown(void)$/;"	f	typeref:typename:void
 test	Unity/examples/example_4/meson.build	/^subdir('test')$/;"	S
 test	Unity/test/Makefile	/^test: $(SRC1) $(SRC2) $(SRC3) $(SRC4) $(SRC5) $(SRC6) $(SRC7) $(SRC8)$/;"	t
 test/test_runners/TestProductionCode2_Runner.c	Unity/examples/example_1/makefile	/^test\/test_runners\/TestProductionCode2_Runner.c: test\/TestProductionCode2.c$/;"	t
@@ -3367,6 +3421,8 @@ test_ThisTestAlwaysPasses	Unity/test/testdata/testRunnerGeneratorSmall.c	/^void 
 test_ThisTestAlwaysPasses	Unity/test/testdata/testRunnerGeneratorWithMocks.c	/^void test_ThisTestAlwaysPasses(void)$/;"	f	typeref:typename:void
 test_TwoMatrices	Unity/test/tests/test_unity_parameterized.c	/^void test_TwoMatrices(unsigned first, signed second)$/;"	f	typeref:typename:TEST_MATRIX ([2,5l,4u+3,4ul],[-2,3])void
 test_TwoRanges	Unity/test/tests/test_unity_parameterized.c	/^void test_TwoRanges(unsigned first, unsigned second)$/;"	f	typeref:typename:TEST_RANGE ([1,2,1],[2,1,-1])void
+test_add_node	tests/09/server/test_server.c	/^void test_add_node(void)$/;"	f	typeref:typename:void
+test_add_node_3_times	tests/09/server/test_server.c	/^void test_add_node_3_times(void)$/;"	f	typeref:typename:void
 test_arr	Unity/test/tests/types_for_test.h	/^static const float test_arr[] = {$/;"	v	typeref:typename:const float[]
 test_bdd_empty_cart	Unity/extras/bdd/test/test_bdd.c	/^void test_bdd_empty_cart(void) {$/;"	f	typeref:typename:void
 test_bdd_logic_test	Unity/extras/bdd/test/test_bdd.c	/^void test_bdd_logic_test(void) {$/;"	f	typeref:typename:void
@@ -3379,6 +3435,7 @@ test_failed_unity_fixture	Unity/auto/parse_output.rb	/^  def test_failed_unity_f
 test_fixtures	Unity/test/rakefile_helper.rb	/^  def test_fixtures()$/;"	f	module:RakefileHelpers
 test_ignored	Unity/auto/parse_output.rb	/^  def test_ignored(array)$/;"	f	class:ParseOutput
 test_ignored_unity_fixture	Unity/auto/parse_output.rb	/^  def test_ignored_unity_fixture(array)$/;"	f	class:ParseOutput
+test_main_init_list	tests/09/server/test_server.c	/^void test_main_init_list(void)$/;"	f	typeref:typename:void
 test_memory	Unity/test/rakefile_helper.rb	/^  def test_memory()$/;"	f	module:RakefileHelpers
 test_passed	Unity/auto/parse_output.rb	/^  def test_passed(array)$/;"	f	class:ParseOutput
 test_passed_unity_fixture	Unity/auto/parse_output.rb	/^  def test_passed_unity_fixture(array)$/;"	f	class:ParseOutput
@@ -3387,7 +3444,8 @@ test_suite_name=	Unity/auto/parse_output.rb	/^  def test_suite_name=(cli_arg)$/;
 test_suite_verify	Unity/auto/parse_output.rb	/^  def test_suite_verify(test_suite_name)$/;"	f	class:ParseOutput
 test_vector_t	Unity/examples/example_5/test/TestProductionCode.c	/^} test_vector_t;$/;"	t	typeref:struct:__anonfc6f5c0c0108	file:
 tester	Unity/extras/bdd/test/meson.build	/^executable('tester', sources, dependencies : unity_dep)$/;"	B
-tokonize_add_node	src/server/08_server.c	/^char *tokonize_add_node(char *bal_msg, MessageList *ll) {$/;"	f	typeref:typename:char *
+tokenize_add_node	src/09/server/server.c	/^int tokenize_add_node(char *bal_msg, MessageList *ll, char **bound) {$/;"	f	typeref:typename:int
+tokenize_add_node	src/server/08_server.c	/^int tokenize_add_node(char *bal_msg, MessageList *ll, char **bound) {$/;"	f	typeref:typename:int
 total_tests	Unity/auto/stylize_as_junit.rb	/^  attr_reader :report, :total_tests, :failures, :ignored$/;"	A	class:UnityToJUnit
 total_tests	Unity/auto/unity_test_summary.rb	/^  attr_reader :report, :total_tests, :failures, :ignored$/;"	A	class:UnityTestSummary
 touch_src	Unity/test/spec/generate_module_existing_file_spec.rb	/^def touch_src(file)$/;"	f
